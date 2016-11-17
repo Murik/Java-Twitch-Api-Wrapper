@@ -12,6 +12,7 @@ public class Stream {
     private long id;
     private String game;
     private int viewers;
+    @JsonProperty("created_at")
     private Date createdAt;
     private int videoHeight;
     private double averageFps;
