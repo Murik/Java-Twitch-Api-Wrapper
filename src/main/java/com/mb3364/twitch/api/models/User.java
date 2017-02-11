@@ -27,7 +27,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class User {
 
     @JsonProperty("_id")
-    private String id;
+    private Integer id;
     @JsonProperty("bio")
     private Object bio;
     @JsonProperty("created_at")
@@ -63,7 +63,7 @@ public class User {
      * @param type
      * @param displayName
      */
-    public User(String id, Object bio, String createdAt, String displayName, Object logo, String name, String type, String updatedAt) {
+    public User(Integer id, Object bio, String createdAt, String displayName, Object logo, String name, String type, String updatedAt) {
         super();
         this.id = id;
         this.bio = bio;
@@ -76,12 +76,12 @@ public class User {
     }
 
     @JsonProperty("_id")
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     @JsonProperty("_id")
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -99,7 +99,7 @@ public abstract class AbstractResource {
             try {
                 if (content.length() > 0) {
                     Error error = objectMapper.readValue(content, Error.class);
-                    apiHandler.onFailure(statusCode, error.getStatusText(), error.getMessage());
+                    apiHandler.onFailure(statusCode, error.getStatus().toString(), error.getMessage());
                 } else {
                     apiHandler.onFailure(statusCode, "", "");
                 }
