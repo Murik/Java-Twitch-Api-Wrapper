@@ -56,6 +56,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void get(final String channelName, final ChannelResponseHandler handler) {
+        //TODO: Add call to get user ID
         String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
@@ -64,29 +65,6 @@ public class ChannelsResource extends AbstractResource {
                 try {
                     Channel value = objectMapper.readValue(content, Channel.class);
                     handler.onSuccess(value);
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a list of user objects who are editors of <code>channelName</code>.
-     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_READ}</p>
-     *
-     * @param channelName the name of the Channel
-     * @param handler     the response handler
-     */
-    public void getEditors(final String channelName, final UsersResponseHandler handler) {
-        String url = String.format("%s/channels/%s/editors", getBaseUrl(), channelName);
-
-        http.get(url, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    Editors value = objectMapper.readValue(content, Editors.class);
-                    handler.onSuccess(value.getUsers());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
@@ -108,6 +86,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void put(final String channelName, final RequestParams params, final ChannelResponseHandler handler) {
+        //TODO:  add call to get user ID
         String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
 
         if (params.containsKey("status")) {
@@ -130,6 +109,164 @@ public class ChannelsResource extends AbstractResource {
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
                     Channel value = objectMapper.readValue(content, Channel.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of user objects who are editors of <code>channelName</code>.
+     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_READ}</p>
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getEditors(final String channelName, final UsersResponseHandler handler) {
+        //TODO:  add call to get user ID
+        String url = String.format("%s/channels/%s/editors", getBaseUrl(), channelName);
+
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    Editors value = objectMapper.readValue(content, Editors.class);
+                    handler.onSuccess(value.getUsers());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of follow objects representing the followers of a channel.
+     *
+     * @param channelName the name of the Channel
+     * @param params      the optional request parameters:
+     *                    <ul>
+     *                    <li><code>limit</code>: Maximum number of objects in array. Default is 25. Maximum is 100.</li>
+     *                    <li><code>offset</code>: Object offset for pagination. Default is 0.</li>
+     *                    <li><code>direction</code>: Creation date sorting direction. Default is <code>desc</code>.
+     *                    Valid values are <code>asc</code> and <code>desc</code>.
+     *                    </li>
+     *                    </ul>
+     * @param handler     the response handler
+     */
+    public void getFollows(final String channelName, final RequestParams params, final ChannelFollowsResponseHandler handler) {
+        //TODO:  add call to get user ID
+        String url = String.format("%s/channels/%s/follows", getBaseUrl(), channelName);
+
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    ChannelFollows value = objectMapper.readValue(content, ChannelFollows.class);
+                    handler.onSuccess(value.getTotal(), value.getFollows());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of follow objects representing the followers of a channel.
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getFollows(final String channelName, final ChannelFollowsResponseHandler handler) {
+        getFollows(channelName, new RequestParams(), handler);
+    }
+
+    /**
+     * Returns a list of team objects the channel belongs to.
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getTeams(final String channelName, final TeamsResponseHandler handler) {
+        //TODO:  add call to get user ID
+        String url = String.format("%s/channels/%s/teams", getBaseUrl(), channelName);
+
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    Teams value = objectMapper.readValue(content, Teams.class);
+                    handler.onSuccess(value.getTeams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of subscription objects sorted by subscription relationship creation date
+     * which contain users subscribed to the specified channel.
+     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_SUBSCRIPTIONS}</p>
+     *
+     * @param channelName the name of the Channel
+     * @param params      the optional request parameters:
+     *                    <ul>
+     *                    <li><code>limit</code>: Maximum number of objects in array. Default is 25. Maximum is 100.</li>
+     *                    <li><code>offset</code>: Object offset for pagination. Default is 0.</li>
+     *                    <li><code>direction</code>: Creation date sorting direction.
+     *                    Default is <code>asc</code>. Valid values are <code>asc</code> and <code>desc</code>.
+     *                    </li>
+     *                    </ul>
+     * @param handler     the response handler
+     */
+    public void getSubscriptions(final String channelName, final RequestParams params, final ChannelSubscriptionsResponseHandler handler) {
+        // TODO: add call to get channelID
+        String url = String.format("%s/channels/%s/subscriptions", getBaseUrl(), channelName);
+
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    ChannelSubscriptions value = objectMapper.readValue(content, ChannelSubscriptions.class);
+                    handler.onSuccess(value.getTotal(), value.getSubscriptions());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of subscription objects sorted by subscription relationship creation date
+     * which contain users subscribed to the specified channel.
+     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_SUBSCRIPTIONS}</p>
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void getSubscriptions(final String channelName, final ChannelSubscriptionsResponseHandler handler) {
+        getSubscriptions(channelName, new RequestParams(), handler);
+    }
+
+    /**
+     * Returns a subscription object which includes the user if that user is subscribed.
+     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_CHECK_SUBSCRIPTION}</p>
+     *
+     * @param channelName the name of the channel
+     * @param user        the user to check
+     * @param handler     the response handler
+     */
+    public void getSubscription(final String channelName, final String user, final ChannelSubscriptionResponseHandler handler) {
+        // TODO: add call to get channelID
+        String url = String.format("%s/channels/%s/subscriptions/%s", getBaseUrl(), channelName, user);
+
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    ChannelSubscription value = objectMapper.readValue(content, ChannelSubscription.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -186,68 +323,6 @@ public class ChannelsResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of team objects the channel belongs to.
-     *
-     * @param channelName the name of the Channel
-     * @param handler     the response handler
-     */
-    public void getTeams(final String channelName, final TeamsResponseHandler handler) {
-        String url = String.format("%s/channels/%s/teams", getBaseUrl(), channelName);
-
-        http.get(url, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    Teams value = objectMapper.readValue(content, Teams.class);
-                    handler.onSuccess(value.getTeams());
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a list of follow objects representing the followers of a channel.
-     *
-     * @param channelName the name of the Channel
-     * @param params      the optional request parameters:
-     *                    <ul>
-     *                    <li><code>limit</code>: Maximum number of objects in array. Default is 25. Maximum is 100.</li>
-     *                    <li><code>offset</code>: Object offset for pagination. Default is 0.</li>
-     *                    <li><code>direction</code>: Creation date sorting direction. Default is <code>desc</code>.
-     *                    Valid values are <code>asc</code> and <code>desc</code>.
-     *                    </li>
-     *                    </ul>
-     * @param handler     the response handler
-     */
-    public void getFollows(final String channelName, final RequestParams params, final ChannelFollowsResponseHandler handler) {
-        String url = String.format("%s/channels/%s/follows", getBaseUrl(), channelName);
-
-        http.get(url, params, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    ChannelFollows value = objectMapper.readValue(content, ChannelFollows.class);
-                    handler.onSuccess(value.getTotal(), value.getFollows());
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a list of follow objects representing the followers of a channel.
-     *
-     * @param channelName the name of the Channel
-     * @param handler     the response handler
-     */
-    public void getFollows(final String channelName, final ChannelFollowsResponseHandler handler) {
-        getFollows(channelName, new RequestParams(), handler);
-    }
-
-    /**
      * Returns a list of videos ordered by time of creation, starting with
      * the most recent from specified channel.
      *
@@ -292,73 +367,5 @@ public class ChannelsResource extends AbstractResource {
      */
     public void getVideos(final String channelName, final VideosResponseHandler handler) {
         getVideos(channelName, new RequestParams(), handler);
-    }
-
-    /**
-     * Returns a list of subscription objects sorted by subscription relationship creation date
-     * which contain users subscribed to the specified channel.
-     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_SUBSCRIPTIONS}</p>
-     *
-     * @param channelName the name of the Channel
-     * @param params      the optional request parameters:
-     *                    <ul>
-     *                    <li><code>limit</code>: Maximum number of objects in array. Default is 25. Maximum is 100.</li>
-     *                    <li><code>offset</code>: Object offset for pagination. Default is 0.</li>
-     *                    <li><code>direction</code>: Creation date sorting direction.
-     *                    Default is <code>asc</code>. Valid values are <code>asc</code> and <code>desc</code>.
-     *                    </li>
-     *                    </ul>
-     * @param handler     the response handler
-     */
-    public void getSubscriptions(final String channelName, final RequestParams params, final ChannelSubscriptionsResponseHandler handler) {
-        String url = String.format("%s/channels/%s/subscriptions", getBaseUrl(), channelName);
-
-        http.get(url, params, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    ChannelSubscriptions value = objectMapper.readValue(content, ChannelSubscriptions.class);
-                    handler.onSuccess(value.getTotal(), value.getSubscriptions());
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a list of subscription objects sorted by subscription relationship creation date
-     * which contain users subscribed to the specified channel.
-     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_SUBSCRIPTIONS}</p>
-     *
-     * @param channelName the name of the Channel
-     * @param handler     the response handler
-     */
-    public void getSubscriptions(final String channelName, final ChannelSubscriptionsResponseHandler handler) {
-        getSubscriptions(channelName, new RequestParams(), handler);
-    }
-
-    /**
-     * Returns a subscription object which includes the user if that user is subscribed.
-     * <p>Authenticated, required scope: {@link Scopes#CHANNEL_CHECK_SUBSCRIPTION}</p>
-     *
-     * @param channelName the name of the channel
-     * @param user        the user to check
-     * @param handler     the response handler
-     */
-    public void getSubscription(final String channelName, final String user, final ChannelSubscriptionResponseHandler handler) {
-        String url = String.format("%s/channels/%s/subscriptions/%s", getBaseUrl(), channelName, user);
-
-        http.get(url, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    ChannelSubscription value = objectMapper.readValue(content, ChannelSubscription.class);
-                    handler.onSuccess(value);
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
     }
 }
