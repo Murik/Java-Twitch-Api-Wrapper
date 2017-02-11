@@ -1,52 +1,95 @@
 package com.mb3364.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+import java.util.HashMap;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "channels",
+        "viewers"
+})
 public class StreamsSummary {
 
-    private int channels;
-    private int viewers;
+    @JsonProperty("channels")
+    private Integer channels;
+    @JsonProperty("viewers")
+    private Integer viewers;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @Override
-    public String toString() {
-        return "StreamsSummary{" +
-                "channels=" + channels +
-                ", viewers=" + viewers +
-                '}';
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public StreamsSummary() {
+    }
+
+    /**
+     *
+     * @param viewers
+     * @param channels
+     */
+    public StreamsSummary(Integer channels, Integer viewers) {
+        super();
+        this.channels = channels;
+        this.viewers = viewers;
+    }
+
+    @JsonProperty("channels")
+    public Integer getChannels() {
+        return channels;
+    }
+
+    @JsonProperty("channels")
+    public void setChannels(Integer channels) {
+        this.channels = channels;
+    }
+
+    @JsonProperty("viewers")
+    public Integer getViewers() {
+        return viewers;
+    }
+
+    @JsonProperty("viewers")
+    public void setViewers(Integer viewers) {
+        this.viewers = viewers;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
-        StreamsSummary that = (StreamsSummary) o;
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
 
-        if (channels != that.channels) return false;
-        return viewers == that.viewers;
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
     @Override
     public int hashCode() {
-        int result = channels;
-        result = 31 * result + viewers;
-        return result;
+        return new HashCodeBuilder().append(channels).append(viewers).append(additionalProperties).toHashCode();
     }
 
-    public int getChannels() {
-        return channels;
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof StreamsSummary)) {
+            return false;
+        }
+        StreamsSummary rhs = ((StreamsSummary) other);
+        return new EqualsBuilder().append(channels, rhs.channels).append(viewers, rhs.viewers).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
-    public void setChannels(int channels) {
-        this.channels = channels;
-    }
-
-    public int getViewers() {
-        return viewers;
-    }
-
-    public void setViewers(int viewers) {
-        this.viewers = viewers;
-    }
 }

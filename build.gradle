@@ -2,9 +2,9 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.mb3364.twitch'
-version = '0.3.1'
+version = '5.0.0'
 
-description = """twitch-api-wrapper"""
+description = """Twitch-v5-API-Wrapper"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
