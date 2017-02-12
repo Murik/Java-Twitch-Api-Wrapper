@@ -54,3 +54,4 @@ build
 gradle
 *.bat
 gradlew
+*.json
