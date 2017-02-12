@@ -4,10 +4,16 @@ import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The {@link ChannelsResource} provides the functionality
@@ -17,6 +23,8 @@ import java.util.Map;
  * @author Ague Mort (contributing author)
  */
 public class ChannelsResource extends AbstractResource {
+
+    private HttpResponse response;
 
     /**
      * Construct the resource using the Twitch API base URL and specified API version.
@@ -59,8 +67,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void get(final String channelName, final ChannelResponseHandler handler) {
-        //TODO: Add call to get user ID
-        String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -95,8 +102,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void put(final String channelName, final RequestParams params, final ChannelResponseHandler handler) {
-        //TODO:  add call to get user ID
-        String url = String.format("%s/channels/%s", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s", getBaseUrl(), getChannelId(channelName).get(0));
 
         if (params.containsKey("status")) {
             params.put("channel[status]", params.getString("status"));
@@ -140,8 +146,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getEditors(final String channelName, final UsersResponseHandler handler) {
-        //TODO:  add call to get user ID
-        String url = String.format("%s/channels/%s/editors", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/editors", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -173,8 +178,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getFollows(final String channelName, final RequestParams params, final ChannelFollowsResponseHandler handler) {
-        //TODO:  add call to get user ID
-        String url = String.format("%s/channels/%s/follows", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/follows", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -206,8 +210,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getTeams(final String channelName, final TeamsResponseHandler handler) {
-        //TODO:  add call to get user ID
-        String url = String.format("%s/channels/%s/teams", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/teams", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -238,8 +241,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getSubscriptions(final String channelName, final RequestParams params, final ChannelSubscriptionsResponseHandler handler) {
-        // TODO: add call to get channelID
-        String url = String.format("%s/channels/%s/subscriptions", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/subscriptions", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -277,14 +279,13 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getSubscription(final String channelName, final String user, final ChannelSubscriptionResponseHandler handler) {
-        // TODO: add call to get userID
-        String url = String.format("%s/channels/%s/subscriptions/%s", getBaseUrl(), channelName, user);
+        String url = String.format("%s/channels/%s/subscriptions/%s", getBaseUrl(), getChannelId(channelName).get(0), getChannelId(user).get(0));
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    ChannelSubscription value = objectMapper.readValue(content, ChannelSubscription.class);
+                    Subscription value = objectMapper.readValue(content, Subscription.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -313,8 +314,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getVideos(final String channelName, final RequestParams params, final VideosResponseHandler handler) {
-        // TODO add handler to get channel ID
-        String url = String.format("%s/channels/%s/videos", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/videos", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -357,8 +357,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void startCommercial(final String channelName, final int length, final CommercialResponseHandler handler) {
-        // TODO: add handler to get ChannelID
-        String url = String.format("%s/channels/%s/commercial", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/commercial", getBaseUrl(), getChannelId(channelName).get(0));
 
         RequestParams params = new RequestParams();
         params.put("length", Integer.toString(length));
@@ -380,8 +379,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void resetStreamKey(final String channelName, final ChannelResponseHandler handler) {
-        // TODO: add handler to get Channel ID
-        String url = String.format("%s/channels/%s/stream_key", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/stream_key", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -403,8 +401,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void getChannelCommunity(final String channelName, final CommunityResponseHandler handler) {
-        // TODO add handler to get channel ID
-        String url = String.format("%s/channels/%s/community", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/community", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -427,8 +424,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void put(final String channelName, String communityId, final CommunityResponseHandler handler) {
-        //TODO:  add call to get user ID
-        String url = String.format("%s/channels/%s/community/%s", getBaseUrl(), channelName, communityId);
+        String url = String.format("%s/channels/%s/community/%s", getBaseUrl(), getChannelId(channelName).get(0), communityId);
 
         http.put(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -445,8 +441,7 @@ public class ChannelsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void put(final String channelName, final CommunityResponseHandler handler) {
-        //TODO:  add call to get user ID
-        String url = String.format("%s/channels/%s/community", getBaseUrl(), channelName);
+        String url = String.format("%s/channels/%s/community", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -454,5 +449,25 @@ public class ChannelsResource extends AbstractResource {
                 // There is no proper response.  Just code 204
             }
         });
+    }
+
+    public List<String> getChannelId(final String channel) {
+        String url = String.format("%s/users?login=%s", getBaseUrl(), channel);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(url);
+        request.addHeader("Client-ID", getClientId());
+        request.addHeader("Accept", "application/vnd.twitchtv.v5+json");
+
+        try {
+            response = client.execute(request);
+            GetUserId value = objectMapper.readValue(new InputStreamReader(response.getEntity().getContent()), GetUserId.class);
+            List<String> uId = new CopyOnWriteArrayList<>();
+            value.getUsers().forEach(userId -> uId.add(userId.getId()));
+            return uId;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
