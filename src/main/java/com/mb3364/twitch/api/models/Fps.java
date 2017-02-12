@@ -15,27 +15,27 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "chunked",
-    "high",
-    "low",
-    "medium",
-    "mobile",
-    "audio_only"
+    "1080p",
+    "144p",
+    "240p",
+    "360p",
+    "480p",
+    "720p"
 })
 public class Fps {
 
-    @JsonProperty("chunked")
-    private Float chunked;
-    @JsonProperty("high")
-    private Float high;
-    @JsonProperty("low")
-    private Float low;
-    @JsonProperty("medium")
-    private Float medium;
-    @JsonProperty("mobile")
-    private Float mobile;
-    @JsonProperty("audio_only")
-    private Integer audioOnly;
+    @JsonProperty("1080p")
+    private Float _1080p;
+    @JsonProperty("144p")
+    private Float _144p;
+    @JsonProperty("240p")
+    private Float _240p;
+    @JsonProperty("360p")
+    private Float _360p;
+    @JsonProperty("480p")
+    private Float _480p;
+    @JsonProperty("720p")
+    private Float _720p;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -48,81 +48,81 @@ public class Fps {
 
     /**
      * 
-     * @param chunked
-     * @param high
-     * @param low
-     * @param audioOnly
-     * @param medium
-     * @param mobile
+     * @param _1080p
+     * @param _720p
+     * @param _144p
+     * @param _480p
+     * @param _360p
+     * @param _240p
      */
-    public Fps(Float chunked, Float high, Float low, Float medium, Float mobile, Integer audioOnly) {
+    public Fps(Float _1080p, Float _144p, Float _240p, Float _360p, Float _480p, Float _720p) {
         super();
-        this.chunked = chunked;
-        this.high = high;
-        this.low = low;
-        this.medium = medium;
-        this.mobile = mobile;
-        this.audioOnly = audioOnly;
+        this._1080p = _1080p;
+        this._144p = _144p;
+        this._240p = _240p;
+        this._360p = _360p;
+        this._480p = _480p;
+        this._720p = _720p;
     }
 
-    @JsonProperty("chunked")
-    public Float getChunked() {
-        return chunked;
+    @JsonProperty("1080p")
+    public Float get1080p() {
+        return _1080p;
     }
 
-    @JsonProperty("chunked")
-    public void setChunked(Float chunked) {
-        this.chunked = chunked;
+    @JsonProperty("1080p")
+    public void set1080p(Float _1080p) {
+        this._1080p = _1080p;
     }
 
-    @JsonProperty("high")
-    public Float getHigh() {
-        return high;
+    @JsonProperty("144p")
+    public Float get144p() {
+        return _144p;
     }
 
-    @JsonProperty("high")
-    public void setHigh(Float high) {
-        this.high = high;
+    @JsonProperty("144p")
+    public void set144p(Float _144p) {
+        this._144p = _144p;
     }
 
-    @JsonProperty("low")
-    public Float getLow() {
-        return low;
+    @JsonProperty("240p")
+    public Float get240p() {
+        return _240p;
     }
 
-    @JsonProperty("low")
-    public void setLow(Float low) {
-        this.low = low;
+    @JsonProperty("240p")
+    public void set240p(Float _240p) {
+        this._240p = _240p;
     }
 
-    @JsonProperty("medium")
-    public Float getMedium() {
-        return medium;
+    @JsonProperty("360p")
+    public Float get360p() {
+        return _360p;
     }
 
-    @JsonProperty("medium")
-    public void setMedium(Float medium) {
-        this.medium = medium;
+    @JsonProperty("360p")
+    public void set360p(Float _360p) {
+        this._360p = _360p;
     }
 
-    @JsonProperty("mobile")
-    public Float getMobile() {
-        return mobile;
+    @JsonProperty("480p")
+    public Float get480p() {
+        return _480p;
     }
 
-    @JsonProperty("mobile")
-    public void setMobile(Float mobile) {
-        this.mobile = mobile;
+    @JsonProperty("480p")
+    public void set480p(Float _480p) {
+        this._480p = _480p;
     }
 
-    @JsonProperty("audio_only")
-    public Integer getAudioOnly() {
-        return audioOnly;
+    @JsonProperty("720p")
+    public Float get720p() {
+        return _720p;
     }
 
-    @JsonProperty("audio_only")
-    public void setAudioOnly(Integer audioOnly) {
-        this.audioOnly = audioOnly;
+    @JsonProperty("720p")
+    public void set720p(Float _720p) {
+        this._720p = _720p;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class Fps {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(chunked).append(high).append(low).append(medium).append(mobile).append(audioOnly).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(_1080p).append(_144p).append(_240p).append(_360p).append(_480p).append(_720p).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -154,7 +154,7 @@ public class Fps {
             return false;
         }
         Fps rhs = ((Fps) other);
-        return new EqualsBuilder().append(chunked, rhs.chunked).append(high, rhs.high).append(low, rhs.low).append(medium, rhs.medium).append(mobile, rhs.mobile).append(audioOnly, rhs.audioOnly).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(_1080p, rhs._1080p).append(_144p, rhs._144p).append(_240p, rhs._240p).append(_360p, rhs._360p).append(_480p, rhs._480p).append(_720p, rhs._720p).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }

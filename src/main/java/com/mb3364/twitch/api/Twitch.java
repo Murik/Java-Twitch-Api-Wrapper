@@ -29,15 +29,14 @@ public class Twitch {
         authenticator = new Authenticator(DEFAULT_BASE_URL);
         // Instantiate resource connectors
         resources = new HashMap<String, AbstractResource>();
-        resources.put("channels", new ChannelsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("channels", new ChannelsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
         resources.put("chat", new ChatResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("games", new GamesResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("ingests", new IngestsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("root", new RootResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("search", new SearchResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("streams", new StreamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("teams", new TeamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
-        resources.put("users", new UsersResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("games", new GamesResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
+        resources.put("ingests", new IngestsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
+        resources.put("search", new SearchResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
+        resources.put("streams", new StreamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
+        resources.put("teams", new TeamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
+        resources.put("users", new UsersResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
         resources.put("videos", new VideosResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
     }
 
@@ -98,7 +97,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -118,7 +116,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -138,7 +135,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -158,7 +154,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -170,26 +165,6 @@ public class Twitch {
     }
 
     /**
-     * Get the {@link RootResource} object. The {@link RootResource} provides
-     * the functionality to access the root <code>/</code> endpoints of the Twitch API.
-     *
-     * @return the {@link RootResource} object
-     * @see ChannelsResource
-     * @see ChatResource
-     * @see GamesResource
-     * @see IngestsResource
-     * @see RootResource
-     * @see SearchResource
-     * @see StreamsResource
-     * @see TeamsResource
-     * @see UsersResource
-     * @see VideosResource
-     */
-    public RootResource root() {
-        return (RootResource) getResource("root");
-    }
-
-    /**
      * Get the {@link SearchResource} object. The {@link SearchResource} provides
      * the functionality to access the <code>/search</code> endpoints of the Twitch API.
      *
@@ -198,7 +173,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -218,7 +192,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -238,7 +211,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -258,7 +230,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource
@@ -278,7 +249,6 @@ public class Twitch {
      * @see ChatResource
      * @see GamesResource
      * @see IngestsResource
-     * @see RootResource
      * @see SearchResource
      * @see StreamsResource
      * @see TeamsResource

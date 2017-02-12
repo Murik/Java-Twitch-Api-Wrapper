@@ -38,7 +38,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "resolutions",
     "created_at",
     "published_at",
-    "channel"
+    "channel",
+    "muted_segments"
 })
 public class Video {
 
@@ -90,6 +91,8 @@ public class Video {
     private String publishedAt;
     @JsonProperty("channel")
     private Channel channel;
+    @JsonProperty("muted_segments")
+    private Object mutedSegments;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -102,32 +105,33 @@ public class Video {
 
     /**
      * 
+     * @param resolutions
+     * @param viewableAt
+     * @param broadcastId
+     * @param id
+     * @param publishedAt
+     * @param title
+     * @param viewable
+     * @param description
+     * @param createdAt
+     * @param length
      * @param status
      * @param broadcastType
      * @param fps
-     * @param resolutions
      * @param animatedPreviewUrl
-     * @param viewableAt
-     * @param thumbnails
      * @param game
-     * @param broadcastId
+     * @param thumbnails
+     * @param mutedSegments
      * @param url
-     * @param publishedAt
-     * @param id
      * @param recordedAt
-     * @param title
-     * @param viewable
      * @param preview
-     * @param createdAt
-     * @param description
      * @param views
-     * @param length
-     * @param tagList
      * @param language
+     * @param tagList
      * @param channel
      * @param descriptionHtml
      */
-    public Video(String title, String description, String descriptionHtml, Integer broadcastId, String broadcastType, String status, String tagList, Integer views, String url, String language, String viewable, Object viewableAt, String animatedPreviewUrl, String id, String recordedAt, String game, Integer length, Preview preview, Thumbnails thumbnails, Fps fps, Resolutions resolutions, String createdAt, String publishedAt, Channel channel) {
+    public Video(String title, String description, String descriptionHtml, Integer broadcastId, String broadcastType, String status, String tagList, Integer views, String url, String language, String viewable, Object viewableAt, String animatedPreviewUrl, String id, String recordedAt, String game, Integer length, Preview preview, Thumbnails thumbnails, Fps fps, Resolutions resolutions, String createdAt, String publishedAt, Channel channel, Object mutedSegments) {
         super();
         this.title = title;
         this.description = description;
@@ -153,6 +157,7 @@ public class Video {
         this.createdAt = createdAt;
         this.publishedAt = publishedAt;
         this.channel = channel;
+        this.mutedSegments = mutedSegments;
     }
 
     @JsonProperty("title")
@@ -395,6 +400,16 @@ public class Video {
         this.channel = channel;
     }
 
+    @JsonProperty("muted_segments")
+    public Object getMutedSegments() {
+        return mutedSegments;
+    }
+
+    @JsonProperty("muted_segments")
+    public void setMutedSegments(Object mutedSegments) {
+        this.mutedSegments = mutedSegments;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -412,7 +427,7 @@ public class Video {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(title).append(description).append(descriptionHtml).append(broadcastId).append(broadcastType).append(status).append(tagList).append(views).append(url).append(language).append(viewable).append(viewableAt).append(animatedPreviewUrl).append(id).append(recordedAt).append(game).append(length).append(preview).append(thumbnails).append(fps).append(resolutions).append(createdAt).append(publishedAt).append(channel).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(title).append(description).append(descriptionHtml).append(broadcastId).append(broadcastType).append(status).append(tagList).append(views).append(url).append(language).append(viewable).append(viewableAt).append(animatedPreviewUrl).append(id).append(recordedAt).append(game).append(length).append(preview).append(thumbnails).append(fps).append(resolutions).append(createdAt).append(publishedAt).append(channel).append(mutedSegments).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -424,7 +439,7 @@ public class Video {
             return false;
         }
         Video rhs = ((Video) other);
-        return new EqualsBuilder().append(title, rhs.title).append(description, rhs.description).append(descriptionHtml, rhs.descriptionHtml).append(broadcastId, rhs.broadcastId).append(broadcastType, rhs.broadcastType).append(status, rhs.status).append(tagList, rhs.tagList).append(views, rhs.views).append(url, rhs.url).append(language, rhs.language).append(viewable, rhs.viewable).append(viewableAt, rhs.viewableAt).append(animatedPreviewUrl, rhs.animatedPreviewUrl).append(id, rhs.id).append(recordedAt, rhs.recordedAt).append(game, rhs.game).append(length, rhs.length).append(preview, rhs.preview).append(thumbnails, rhs.thumbnails).append(fps, rhs.fps).append(resolutions, rhs.resolutions).append(createdAt, rhs.createdAt).append(publishedAt, rhs.publishedAt).append(channel, rhs.channel).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(title, rhs.title).append(description, rhs.description).append(descriptionHtml, rhs.descriptionHtml).append(broadcastId, rhs.broadcastId).append(broadcastType, rhs.broadcastType).append(status, rhs.status).append(tagList, rhs.tagList).append(views, rhs.views).append(url, rhs.url).append(language, rhs.language).append(viewable, rhs.viewable).append(viewableAt, rhs.viewableAt).append(animatedPreviewUrl, rhs.animatedPreviewUrl).append(id, rhs.id).append(recordedAt, rhs.recordedAt).append(game, rhs.game).append(length, rhs.length).append(preview, rhs.preview).append(thumbnails, rhs.thumbnails).append(fps, rhs.fps).append(resolutions, rhs.resolutions).append(createdAt, rhs.createdAt).append(publishedAt, rhs.publishedAt).append(channel, rhs.channel).append(mutedSegments, rhs.mutedSegments).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }
