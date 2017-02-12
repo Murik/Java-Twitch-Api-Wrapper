@@ -5,15 +5,10 @@ import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The {@link UsersResource} provides the functionality
@@ -70,7 +65,7 @@ public class UsersResource extends AbstractResource {
      * @param handler the response handler
      */
     public void get(final String user, final UserResponseHandler handler) {
-        String url = String.format("%s/users/%s", getBaseUrl(), getUserId(user).get(0));
+        String url = String.format("%s/users/%s", getBaseUrl(), getChannelId(user).get(0));
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -96,7 +91,7 @@ public class UsersResource extends AbstractResource {
      */
     public void getSubscription(final String user, final String channel, final UserSubscriptionResponseHandler handler) {
         // TODO: add hook for channel ID
-        String url = String.format("%s/users/%s/subscriptions/%s", getBaseUrl(), getUserId(user).get(0), channel);
+        String url = String.format("%s/users/%s/subscriptions/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -128,7 +123,7 @@ public class UsersResource extends AbstractResource {
      * @param handler the response handler
      */
     public void getFollows(final String user, final RequestParams params, final UserFollowsResponseHandler handler) {
-        String url = String.format("%s/users/%s/follows/channels", getBaseUrl(), getUserId(user).get(0));
+        String url = String.format("%s/users/%s/follows/channels", getBaseUrl(), getChannelId(user).get(0));
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -164,7 +159,7 @@ public class UsersResource extends AbstractResource {
      */
     public void getFollow(final String user, final String channel, final UserFollowResponseHandler handler) {
         // TODO: add hook for getting channel IDs
-        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getUserId(user).get(0), channel);
+        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -193,7 +188,7 @@ public class UsersResource extends AbstractResource {
      */
     public void follow(final String user, final String channel, final boolean enableNotifications, final UserFollowResponseHandler handler) {
         // TODO: add hooks for Channel IDs
-        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getUserId(user).get(0), channel);
+        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         RequestParams params = new RequestParams();
         params.put("notifications", Boolean.toString(enableNotifications));
@@ -235,7 +230,7 @@ public class UsersResource extends AbstractResource {
      */
     public void unfollow(final String user, final String channel, final UserUnfollowResponseHandler handler) {
         // TODO: add hooks for getting Channel IDs
-        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getUserId(user).get(0), channel);
+        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -259,7 +254,7 @@ public class UsersResource extends AbstractResource {
      * @param handler the response handler
      */
     public void getBlocks(final String user, final RequestParams params, final BlocksResponseHandler handler) {
-        String url = String.format("%s/users/%s/blocks", getBaseUrl(), getUserId(user).get(0));
+        String url = String.format("%s/users/%s/blocks", getBaseUrl(), getChannelId(user).get(0));
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -296,7 +291,7 @@ public class UsersResource extends AbstractResource {
      * @param handler the response handler
      */
     public void putBlock(final String user, final String target, final BlockResponseHandler handler) {
-        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), getUserId(user).get(0), target);
+        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), getChannelId(user).get(0), target);
 
         http.put(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -320,7 +315,7 @@ public class UsersResource extends AbstractResource {
      * @param handler the response handler
      */
     public void deleteBlock(final String user, final String target, final UnblockResponseHandler handler) {
-        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), getUserId(user).get(0), target);
+        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), getChannelId(user).get(0), target);
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
@@ -328,24 +323,5 @@ public class UsersResource extends AbstractResource {
                 handler.onSuccess();
             }
         });
-    }
-
-    public List<String> getUserId(final String user) {
-        String url = String.format("%s/users?login=%s", getBaseUrl(), user);
-
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet(url);
-        request.addHeader("Accept", "application/vnd.twitchtv.v5+json");
-        request.addHeader("Client-ID", getClientId());
-        try {
-            response = client.execute(request);
-            GetUserId value = objectMapper.readValue(new InputStreamReader(response.getEntity().getContent()), GetUserId.class);
-            List<String> uId = new CopyOnWriteArrayList<>();
-            value.getUsers().forEach(userId -> uId.add(userId.getId()));
-            return uId;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

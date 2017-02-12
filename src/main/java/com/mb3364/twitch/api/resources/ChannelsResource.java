@@ -5,15 +5,10 @@ import com.mb3364.twitch.api.auth.Scopes;
 import com.mb3364.twitch.api.handlers.*;
 import com.mb3364.twitch.api.models.*;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The {@link ChannelsResource} provides the functionality
@@ -449,25 +444,5 @@ public class ChannelsResource extends AbstractResource {
                 // There is no proper response.  Just code 204
             }
         });
-    }
-
-    public List<String> getChannelId(final String channel) {
-        String url = String.format("%s/users?login=%s", getBaseUrl(), channel);
-
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet(url);
-        request.addHeader("Client-ID", getClientId());
-        request.addHeader("Accept", "application/vnd.twitchtv.v5+json");
-
-        try {
-            response = client.execute(request);
-            GetUserId value = objectMapper.readValue(new InputStreamReader(response.getEntity().getContent()), GetUserId.class);
-            List<String> uId = new CopyOnWriteArrayList<>();
-            value.getUsers().forEach(userId -> uId.add(userId.getId()));
-            return uId;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

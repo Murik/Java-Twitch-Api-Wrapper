@@ -10,6 +10,7 @@ import com.mb3364.twitch.api.models.Stream;
 import com.mb3364.twitch.api.models.Streams;
 import com.mb3364.twitch.api.models.StreamsFeatured;
 import com.mb3364.twitch.api.models.StreamsSummary;
+import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.Map;
  * @author Ague Mort (contributing author)
  */
 public class StreamsResource extends AbstractResource {
+
+    private HttpResponse response;
 
     private void httpGet(String url, RequestParams params, StreamsResponseHandler handler) {
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
@@ -49,7 +52,7 @@ public class StreamsResource extends AbstractResource {
 
     /**
      * Gets stream information (the {@link Streams} object) for a specified user.
-     * <p>
+     *
      * <p>The stream object in the onSuccess() response will be <code>null</code> if the stream is offline.</p>
      *
      * @param channelName the name of the Channel
@@ -63,10 +66,33 @@ public class StreamsResource extends AbstractResource {
      * @param handler     the response handler
      */
     public void get(final String channelName, final RequestParams params, final StreamResponseHandler handler) {
-        //TODO: add hook to get Channel ID
-        String url = String.format("%s/streams/%s", getBaseUrl(), channelName);
+        String url = String.format("%s/streams/%s", getBaseUrl(), getChannelId(channelName).get(0));
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    Stream value = objectMapper.readValue(content, Stream.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Gets stream information (the {@link Streams} object) for a specified user.
+     *
+     * <p>The stream object in the onSuccess() response will be <code>null</code> if the stream is offline.</p>
+     *
+     * @param channelName the name of the Channel
+     * @param handler     the response handler
+     */
+    public void get(final String channelName, final StreamResponseHandler handler) {
+        String url = String.format("%s/streams/%s", getBaseUrl(), getChannelId(channelName).get(0));
+
+        http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
