@@ -1,64 +1,112 @@
+
 package com.mb3364.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "_id",
+    "channel",
+    "created_at"
+})
 public class UserSubscription {
 
     @JsonProperty("_id")
     private String id;
-    private Date createdAt;
+    @JsonProperty("channel")
     private Channel channel;
+    @JsonProperty("created_at")
+    private String createdAt;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @Override
-    public String toString() {
-        return "UserSubscription{" +
-                "id='" + id + '\'' +
-                ", createdAt=" + createdAt +
-                ", channel=" + channel +
-                '}';
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public UserSubscription() {
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserSubscription that = (UserSubscription) o;
-
-        return !(id != null ? !id.equals(that.id) : that.id != null);
-
+    /**
+     * 
+     * @param id
+     * @param createdAt
+     * @param channel
+     */
+    public UserSubscription(String id, Channel channel, String createdAt) {
+        super();
+        this.id = id;
+        this.channel = channel;
+        this.createdAt = createdAt;
     }
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
+    @JsonProperty("_id")
     public String getId() {
         return id;
     }
 
+    @JsonProperty("_id")
     public void setId(String id) {
         this.id = id;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
+    @JsonProperty("channel")
     public Channel getChannel() {
         return channel;
     }
 
+    @JsonProperty("channel")
     public void setChannel(Channel channel) {
         this.channel = channel;
     }
+
+    @JsonProperty("created_at")
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    @JsonProperty("created_at")
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(id).append(channel).append(createdAt).append(additionalProperties).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof UserSubscription)) {
+            return false;
+        }
+        UserSubscription rhs = ((UserSubscription) other);
+        return new EqualsBuilder().append(id, rhs.id).append(channel, rhs.channel).append(createdAt, rhs.createdAt)
+                .append(additionalProperties, rhs.additionalProperties).isEquals();
+    }
+
 }

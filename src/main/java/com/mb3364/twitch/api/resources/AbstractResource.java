@@ -22,6 +22,7 @@ public abstract class AbstractResource {
     protected static final ObjectMapper objectMapper = new ObjectMapper(); // can reuse
     protected static final AsyncHttpClient http = new AsyncHttpClient(); // can reuse
     private final String baseUrl; // Base url for twitch rest api
+    protected String cId;
 
     /**
      * Construct a resource using the Twitch API base URL and specified API version.
@@ -63,10 +64,15 @@ public abstract class AbstractResource {
      */
     public void setClientId(String clientId) {
         if (clientId != null && clientId.length() > 0) {
+            this.cId = clientId;
             http.setHeader("Client-ID", clientId);
         } else {
             http.removeHeader("Client-ID");
         }
+    }
+
+    public String getClientId() {
+        return cId;
     }
 
     /**

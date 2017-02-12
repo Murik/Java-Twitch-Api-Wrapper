@@ -12,12 +12,15 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "teams"
+    "_total",
+    "users"
 })
-public class Teams {
+public class GetUserId {
 
-    @JsonProperty("teams")
-    private List<Team> teams = null;
+    @JsonProperty("_total")
+    private Integer total;
+    @JsonProperty("users")
+    private List<User> users = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -25,26 +28,38 @@ public class Teams {
      * No args constructor for use in serialization
      * 
      */
-    public Teams() {
+    public GetUserId() {
     }
 
     /**
      * 
-     * @param teams
+     * @param total
+     * @param users
      */
-    public Teams(List<Team> teams) {
+    public GetUserId(Integer total, List<User> users) {
         super();
-        this.teams = teams;
+        this.total = total;
+        this.users = users;
     }
 
-    @JsonProperty("teams")
-    public List<Team> getTeams() {
-        return teams;
+    @JsonProperty("_total")
+    public Integer getTotal() {
+        return total;
     }
 
-    @JsonProperty("teams")
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
+    @JsonProperty("_total")
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    @JsonProperty("users")
+    public List<User> getUsers() {
+        return users;
+    }
+
+    @JsonProperty("users")
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     @Override
@@ -64,7 +79,7 @@ public class Teams {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(teams).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(total).append(users).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -72,11 +87,11 @@ public class Teams {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof Teams)) {
+        if (!(other instanceof GetUserId)) {
             return false;
         }
-        Teams rhs = ((Teams) other);
-        return new EqualsBuilder().append(teams, rhs.teams).append(additionalProperties, rhs.additionalProperties).isEquals();
+        GetUserId rhs = ((GetUserId) other);
+        return new EqualsBuilder().append(total, rhs.total).append(users, rhs.users).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }

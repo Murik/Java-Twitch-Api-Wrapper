@@ -17,7 +17,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @JsonPropertyOrder({
     "created_at",
     "notifications",
-    "user"
+    "channel"
 })
 public class Follow {
 
@@ -25,8 +25,8 @@ public class Follow {
     private String createdAt;
     @JsonProperty("notifications")
     private Boolean notifications;
-    @JsonProperty("user")
-    private User user;
+    @JsonProperty("channel")
+    private Channel channel;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -41,13 +41,13 @@ public class Follow {
      * 
      * @param notifications
      * @param createdAt
-     * @param user
+     * @param channel
      */
-    public Follow(String createdAt, Boolean notifications, User user) {
+    public Follow(String createdAt, Boolean notifications, Channel channel) {
         super();
         this.createdAt = createdAt;
         this.notifications = notifications;
-        this.user = user;
+        this.channel = channel;
     }
 
     @JsonProperty("created_at")
@@ -70,14 +70,14 @@ public class Follow {
         this.notifications = notifications;
     }
 
-    @JsonProperty("user")
-    public User getUser() {
-        return user;
+    @JsonProperty("channel")
+    public Channel getChannel() {
+        return channel;
     }
 
-    @JsonProperty("user")
-    public void setUser(User user) {
-        this.user = user;
+    @JsonProperty("channel")
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Follow {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(createdAt).append(notifications).append(user).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(createdAt).append(notifications).append(channel).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -109,7 +109,7 @@ public class Follow {
             return false;
         }
         Follow rhs = ((Follow) other);
-        return new EqualsBuilder().append(createdAt, rhs.createdAt).append(notifications, rhs.notifications).append(user, rhs.user).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(createdAt, rhs.createdAt).append(notifications, rhs.notifications).append(channel, rhs.channel).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }

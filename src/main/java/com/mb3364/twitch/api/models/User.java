@@ -1,41 +1,36 @@
-
 package com.mb3364.twitch.api.models;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "_id",
-    "bio",
-    "created_at",
-    "display_name",
-    "logo",
-    "name",
-    "type",
-    "updated_at"
+        "_id",
+        "bio",
+        "created_at",
+        "display_name",
+        "logo",
+        "name",
+        "type",
+        "updated_at"
 })
 public class User {
 
     @JsonProperty("_id")
-    private Integer id;
+    private String id;
     @JsonProperty("bio")
-    private Object bio;
+    private String bio;
     @JsonProperty("created_at")
     private String createdAt;
     @JsonProperty("display_name")
     private String displayName;
     @JsonProperty("logo")
-    private Object logo;
+    private String logo;
     @JsonProperty("name")
     private String name;
     @JsonProperty("type")
@@ -47,13 +42,13 @@ public class User {
 
     /**
      * No args constructor for use in serialization
-     * 
+     *
      */
     public User() {
     }
 
     /**
-     * 
+     *
      * @param updatedAt
      * @param id
      * @param logo
@@ -63,7 +58,7 @@ public class User {
      * @param type
      * @param displayName
      */
-    public User(Integer id, Object bio, String createdAt, String displayName, Object logo, String name, String type, String updatedAt) {
+    public User(String id, String bio, String createdAt, String displayName, String logo, String name, String type, String updatedAt) {
         super();
         this.id = id;
         this.bio = bio;
@@ -76,22 +71,22 @@ public class User {
     }
 
     @JsonProperty("_id")
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
     @JsonProperty("_id")
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     @JsonProperty("bio")
-    public Object getBio() {
+    public String getBio() {
         return bio;
     }
 
     @JsonProperty("bio")
-    public void setBio(Object bio) {
+    public void setBio(String bio) {
         this.bio = bio;
     }
 
@@ -116,12 +111,12 @@ public class User {
     }
 
     @JsonProperty("logo")
-    public Object getLogo() {
+    public String getLogo() {
         return logo;
     }
 
     @JsonProperty("logo")
-    public void setLogo(Object logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 
@@ -172,7 +167,8 @@ public class User {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).append(bio).append(createdAt).append(displayName).append(logo).append(name).append(type).append(updatedAt).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(id).append(bio).append(createdAt).append(displayName).append(logo)
+                .append(name).append(type).append(updatedAt).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -180,11 +176,14 @@ public class User {
         if (other == this) {
             return true;
         }
-        if ((other instanceof User) == false) {
+        if (!(other instanceof User)) {
             return false;
         }
         User rhs = ((User) other);
-        return new EqualsBuilder().append(id, rhs.id).append(bio, rhs.bio).append(createdAt, rhs.createdAt).append(displayName, rhs.displayName).append(logo, rhs.logo).append(name, rhs.name).append(type, rhs.type).append(updatedAt, rhs.updatedAt).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(id, rhs.id).append(bio, rhs.bio).append(createdAt, rhs.createdAt)
+                .append(displayName, rhs.displayName).append(logo, rhs.logo).append(name, rhs.name)
+                .append(type, rhs.type).append(updatedAt, rhs.updatedAt)
+                .append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.mb3364.twitch.api.handlers;
 
-import com.mb3364.twitch.api.models.UserFollow;
+import com.mb3364.twitch.api.models.Follow;
 
 public interface UserFollowResponseHandler extends BaseFailureHandler {
-    void onSuccess(UserFollow follow);
+    void onSuccess(Follow follow);
 }

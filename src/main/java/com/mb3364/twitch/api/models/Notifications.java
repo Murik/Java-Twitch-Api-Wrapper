@@ -2,7 +2,6 @@
 package com.mb3364.twitch.api.models;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -16,12 +15,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "users"
+    "email",
+    "push"
 })
-public class Editors {
+public class Notifications {
 
-    @JsonProperty("users")
-    private List<User> users = null;
+    @JsonProperty("email")
+    private Boolean email;
+    @JsonProperty("push")
+    private Boolean push;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -29,26 +31,38 @@ public class Editors {
      * No args constructor for use in serialization
      * 
      */
-    public Editors() {
+    public Notifications() {
     }
 
     /**
      * 
-     * @param users
+     * @param email
+     * @param push
      */
-    public Editors(List<User> users) {
+    public Notifications(Boolean email, Boolean push) {
         super();
-        this.users = users;
+        this.email = email;
+        this.push = push;
     }
 
-    @JsonProperty("users")
-    public List<User> getUsers() {
-        return users;
+    @JsonProperty("email")
+    public Boolean getEmail() {
+        return email;
     }
 
-    @JsonProperty("users")
-    public void setUsers(List<User> users) {
-        this.users = users;
+    @JsonProperty("email")
+    public void setEmail(Boolean email) {
+        this.email = email;
+    }
+
+    @JsonProperty("push")
+    public Boolean getPush() {
+        return push;
+    }
+
+    @JsonProperty("push")
+    public void setPush(Boolean push) {
+        this.push = push;
     }
 
     @Override
@@ -68,7 +82,7 @@ public class Editors {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(users).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(email).append(push).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -76,11 +90,11 @@ public class Editors {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Editors) == false) {
+        if ((other instanceof Notifications) == false) {
             return false;
         }
-        Editors rhs = ((Editors) other);
-        return new EqualsBuilder().append(users, rhs.users).append(additionalProperties, rhs.additionalProperties).isEquals();
+        Notifications rhs = ((Notifications) other);
+        return new EqualsBuilder().append(email, rhs.email).append(push, rhs.push).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }
