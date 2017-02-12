@@ -4,7 +4,9 @@ import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
 import com.mb3364.twitch.api.handlers.GamesResponseHandler;
 import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import com.mb3364.twitch.api.models.SearchResultContainer;
+import com.mb3364.twitch.api.models.SearchChannels;
+import com.mb3364.twitch.api.models.SearchGames;
+import com.mb3364.twitch.api.models.SearchStreams;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,13 +43,13 @@ public class SearchResource extends AbstractResource {
      */
     public void channels(final String query, final RequestParams params, final ChannelsResponseHandler handler) {
         String url = String.format("%s/search/channels", getBaseUrl());
-        params.put("q", query);
+        params.put("query", query);
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
+                    SearchChannels value = objectMapper.readValue(content, SearchChannels.class);
                     handler.onSuccess(value.getTotal(), value.getChannels());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -67,46 +69,6 @@ public class SearchResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of stream objects matching the search query.
-     *
-     * @param query   the search query
-     * @param params  the optional request parameters:
-     *                <ul>
-     *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
-     *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
-     *                <li><code>hls</code>:  If set to true, only returns streams using HLS.
-     *                If set to false, only returns streams that are non-HLS.</li>
-     *                </ul>
-     * @param handler the response handler
-     */
-    public void streams(final String query, final RequestParams params, final StreamsResponseHandler handler) {
-        String url = String.format("%s/search/streams", getBaseUrl());
-        params.put("q", query);
-
-        http.get(url, params, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
-                    handler.onSuccess(value.getTotal(), value.getStreams());
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a list of stream objects matching the search query.
-     *
-     * @param query   the search query
-     * @param handler the response handler
-     */
-    public void streams(final String query, final StreamsResponseHandler handler) {
-        streams(query, new RequestParams(), handler);
-    }
-
-    /**
      * Returns a list of game objects matching the search query.
      *
      * @param query   the search query
@@ -118,14 +80,13 @@ public class SearchResource extends AbstractResource {
      */
     public void games(final String query, final RequestParams params, final GamesResponseHandler handler) {
         String url = String.format("%s/search/games", getBaseUrl());
-        params.put("q", query);
-        params.put("type", "suggest");
+        params.put("query", query);
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
+                    SearchGames value = objectMapper.readValue(content, SearchGames.class);
                     handler.onSuccess(value.getGames().size(), value.getGames());
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -142,5 +103,47 @@ public class SearchResource extends AbstractResource {
      */
     public void games(final String query, final GamesResponseHandler handler) {
         games(query, new RequestParams(), handler);
+    }
+
+    /**
+     * Returns a list of stream objects matching the search query.
+     *
+     * @param query   the search query
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>: Integer: The maximum number of objects in array. Maximum is 100.</li>
+     *                <li><code>offset</code>: Integer: The object offset for pagination. Default is 0.</li>
+     *                <li><code>hls</code>: Boolean: If true, returns only HLS streams; if false, only RTMP streams; if not set, both HLS and RTMP streams.
+     *                HLS is HTTP Live Streaming, a live-streaming communications protocol.
+     *                RTMP is Real-Time Media Protocol, an industry standard for moving video around a network.
+     *                Default: not set.</li>
+     *                </ul>
+     * @param handler the response handler
+     */
+    public void streams(final String query, final RequestParams params, final StreamsResponseHandler handler) {
+        String url = String.format("%s/search/streams", getBaseUrl());
+        params.put("query", query);
+
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    SearchStreams value = objectMapper.readValue(content, SearchStreams.class);
+                    handler.onSuccess(value.getTotal(), value.getStreams());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of stream objects matching the search query.
+     *
+     * @param query   the search query
+     * @param handler the response handler
+     */
+    public void streams(final String query, final StreamsResponseHandler handler) {
+        streams(query, new RequestParams(), handler);
     }
 }
