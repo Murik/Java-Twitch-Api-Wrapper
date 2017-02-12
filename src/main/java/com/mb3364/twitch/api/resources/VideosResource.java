@@ -2,10 +2,12 @@ package com.mb3364.twitch.api.resources;
 
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.auth.Scopes;
+import com.mb3364.twitch.api.handlers.TopVideosResponseHandler;
 import com.mb3364.twitch.api.handlers.VideoResponseHandler;
 import com.mb3364.twitch.api.handlers.VideosResponseHandler;
 import com.mb3364.twitch.api.models.Video;
 import com.mb3364.twitch.api.models.Videos;
+import com.mb3364.twitch.api.models.VideosTop;
 
 import java.io.IOException;
 import java.util.List;
@@ -70,10 +72,20 @@ public class VideosResource extends AbstractResource {
      *                </ul>
      * @param handler the response handler
      */
-    public void getTop(final RequestParams params, final VideosResponseHandler handler) {
+    public void getTop(final RequestParams params, final TopVideosResponseHandler handler) {
         String url = String.format("%s/videos/top", getBaseUrl());
 
-        httpGetVideos(url, params, handler);
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    VideosTop value = objectMapper.readValue(content, VideosTop.class);
+                    handler.onSuccess(value.getVods().size(), value.getVods());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
     }
 
     /**
@@ -81,7 +93,7 @@ public class VideosResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void getTop(final VideosResponseHandler handler) {
+    public void getTop(final TopVideosResponseHandler handler) {
         getTop(null, handler);
     }
 
@@ -103,20 +115,6 @@ public class VideosResource extends AbstractResource {
     public void getFollowed(final RequestParams params, final VideosResponseHandler handler) {
         String url = String.format("%s/videos/followed", getBaseUrl());
 
-        httpGetVideos(url, params, handler);
-    }
-
-    /**
-     * Returns a list of {@link Video}'s from channels that the authenticated user is following.
-     * Authenticated, required scope: {@link Scopes#USER_READ}
-     *
-     * @param handler the response handler
-     */
-    public void getFollowed(final VideosResponseHandler handler) {
-        getFollowed(new RequestParams(), handler);
-    }
-
-    private void httpGetVideos(String url, RequestParams params, final VideosResponseHandler handler) {
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
@@ -128,5 +126,15 @@ public class VideosResource extends AbstractResource {
                 }
             }
         });
+    }
+
+    /**
+     * Returns a list of {@link Video}'s from channels that the authenticated user is following.
+     * Authenticated, required scope: {@link Scopes#USER_READ}
+     *
+     * @param handler the response handler
+     */
+    public void getFollowed(final VideosResponseHandler handler) {
+        getFollowed(new RequestParams(), handler);
     }
 }
