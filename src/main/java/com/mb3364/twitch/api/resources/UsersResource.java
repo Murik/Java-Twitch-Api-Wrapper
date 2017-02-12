@@ -19,7 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * The {@link UsersResource} provides the functionality
  * to access the <code>/users</code> endpoints of the Twitch API.
  *
- * @author Matthew Bell
+ * @author Matthew Bell (original author)
+ * @author Ague Mort (contributing author)
  */
 public class UsersResource extends AbstractResource {
 

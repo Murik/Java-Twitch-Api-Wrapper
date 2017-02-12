@@ -1,13 +1,18 @@
 
 package com.mb3364.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -19,7 +24,8 @@ import java.util.Map;
     "updated_at",
     "logo",
     "banner",
-    "background"
+    "background",
+    "users"
 })
 public class Team {
 
@@ -41,6 +47,8 @@ public class Team {
     private Object banner;
     @JsonProperty("background")
     private String background;
+    @JsonProperty("users")
+    private List<User> users = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -56,6 +64,7 @@ public class Team {
      * @param updatedAt
      * @param id
      * @param logo
+     * @param users
      * @param createdAt
      * @param background
      * @param name
@@ -63,7 +72,7 @@ public class Team {
      * @param banner
      * @param info
      */
-    public Team(Integer id, String name, String info, String displayName, String createdAt, String updatedAt, String logo, Object banner, String background) {
+    public Team(Integer id, String name, String info, String displayName, String createdAt, String updatedAt, String logo, Object banner, String background, List<User> users) {
         super();
         this.id = id;
         this.name = name;
@@ -74,6 +83,7 @@ public class Team {
         this.logo = logo;
         this.banner = banner;
         this.background = background;
+        this.users = users;
     }
 
     @JsonProperty("_id")
@@ -166,6 +176,16 @@ public class Team {
         this.background = background;
     }
 
+    @JsonProperty("users")
+    public List<User> getUsers() {
+        return users;
+    }
+
+    @JsonProperty("users")
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -183,7 +203,7 @@ public class Team {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).append(name).append(info).append(displayName).append(createdAt).append(updatedAt).append(logo).append(banner).append(background).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(id).append(name).append(info).append(displayName).append(createdAt).append(updatedAt).append(logo).append(banner).append(background).append(users).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -191,11 +211,11 @@ public class Team {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof Team)) {
+        if ((other instanceof Team) == false) {
             return false;
         }
         Team rhs = ((Team) other);
-        return new EqualsBuilder().append(id, rhs.id).append(name, rhs.name).append(info, rhs.info).append(displayName, rhs.displayName).append(createdAt, rhs.createdAt).append(updatedAt, rhs.updatedAt).append(logo, rhs.logo).append(banner, rhs.banner).append(background, rhs.background).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(id, rhs.id).append(name, rhs.name).append(info, rhs.info).append(displayName, rhs.displayName).append(createdAt, rhs.createdAt).append(updatedAt, rhs.updatedAt).append(logo, rhs.logo).append(banner, rhs.banner).append(background, rhs.background).append(users, rhs.users).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }
