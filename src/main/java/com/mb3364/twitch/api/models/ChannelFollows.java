@@ -27,7 +27,7 @@ public class ChannelFollows {
     @JsonProperty("_total")
     private Integer total;
     @JsonProperty("follows")
-    private List<Follow> follows = null;
+    private List<FollowUsers> follows = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -44,7 +44,7 @@ public class ChannelFollows {
      * @param total
      * @param cursor
      */
-    public ChannelFollows(String cursor, Integer total, List<Follow> follows) {
+    public ChannelFollows(String cursor, Integer total, List<FollowUsers> follows) {
         super();
         this.cursor = cursor;
         this.total = total;
@@ -72,12 +72,12 @@ public class ChannelFollows {
     }
 
     @JsonProperty("follows")
-    public List<Follow> getFollows() {
+    public List<FollowUsers> getFollows() {
         return follows;
     }
 
     @JsonProperty("follows")
-    public void setFollows(List<Follow> follows) {
+    public void setFollows(List<FollowUsers> follows) {
         this.follows = follows;
     }
 
