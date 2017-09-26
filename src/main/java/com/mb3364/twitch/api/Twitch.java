@@ -1,10 +1,9 @@
 package com.mb3364.twitch.api;
 
-import com.mb3364.twitch.api.auth.Authenticator;
-import com.mb3364.twitch.api.resources.*;
-
 import java.util.HashMap;
 import java.util.Map;
+import com.mb3364.twitch.api.auth.Authenticator;
+import com.mb3364.twitch.api.resources.*;
 
 /**
  * Enables the ability to interact with the Twitch.tv REST API.
@@ -38,6 +37,7 @@ public class Twitch {
         resources.put("teams", new TeamsResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
         resources.put("users", new UsersResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
         resources.put("videos", new VideosResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
+        resources.put("root", new RootResource(DEFAULT_BASE_URL,DEFAULT_API_VERSION));
     }
 
     /**
@@ -102,6 +102,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public ChannelsResource channels() {
         return (ChannelsResource) getResource("channels");
@@ -121,6 +122,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public ChatResource chat() {
         return (ChatResource) getResource("chat");
@@ -140,6 +142,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public GamesResource games() {
         return (GamesResource) getResource("games");
@@ -159,6 +162,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public IngestsResource ingests() {
         return (IngestsResource) getResource("ingests");
@@ -178,6 +182,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public SearchResource search() {
         return (SearchResource) getResource("search");
@@ -197,6 +202,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public StreamsResource streams() {
         return (StreamsResource) getResource("streams");
@@ -216,6 +222,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public TeamsResource teams() {
         return (TeamsResource) getResource("teams");
@@ -235,6 +242,7 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public UsersResource users() {
         return (UsersResource) getResource("users");
@@ -254,8 +262,27 @@ public class Twitch {
      * @see TeamsResource
      * @see UsersResource
      * @see VideosResource
+     * @see RootResource
      */
     public VideosResource videos() {
         return (VideosResource) getResource("videos");
     }
+
+    /**
+     * Get the {@link VideosResource} object. The {@link VideosResource} provides
+     * the functionality to access the root <code>/</code> endpoints of the Twitch API.
+     *
+     * @return the {@link RootResource} object
+     * @see ChannelsResource
+     * @see ChatResource
+     * @see GamesResource
+     * @see IngestsResource
+     * @see SearchResource
+     * @see StreamsResource
+     * @see TeamsResource
+     * @see UsersResource
+     * @see VideosResource
+     * @see RootResource
+     */
+    public RootResource root() {return (RootResource) getResource("root");}
 }
