@@ -180,7 +180,7 @@ public class ChannelsResource extends AbstractResource {
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
                     ChannelFollows value = objectMapper.readValue(content, ChannelFollows.class);
-                    handler.onSuccess(value.getTotal(), value.getFollows());
+                    handler.onSuccess(value.getTotal(), value.getFollows(), value.getCursor());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
