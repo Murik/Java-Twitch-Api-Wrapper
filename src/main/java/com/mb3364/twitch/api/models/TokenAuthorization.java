@@ -27,6 +27,13 @@ public class TokenAuthorization {
     @JsonProperty("updated_at")
     private Date updatedAt;
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public List<Scopes> getScopes() {
         return scopes;
@@ -39,20 +46,20 @@ public class TokenAuthorization {
         }
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(createdAt)
+                .append(updatedAt)
+                .toHashCode();
     }
 
     @Override
@@ -68,13 +75,5 @@ public class TokenAuthorization {
                 .append(scopes, that.scopes)
                 .append(updatedAt, that.updatedAt)
                 .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(createdAt)
-                .append(updatedAt)
-                .toHashCode();
     }
 }

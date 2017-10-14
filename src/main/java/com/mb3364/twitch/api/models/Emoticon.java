@@ -1,4 +1,3 @@
-
 package com.mb3364.twitch.api.models;
 
 import java.util.HashMap;
@@ -16,11 +15,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "regex",
-    "images"
+        "id",
+        "regex",
+        "images"
 })
 public class Emoticon {
 
+    @JsonProperty("id")
+    private int id;
     @JsonProperty("regex")
     private String regex;
     @JsonProperty("images")
@@ -30,19 +32,40 @@ public class Emoticon {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Emoticon() {
     }
 
     /**
-     * 
      * @param regex
      * @param images
      */
     public Emoticon(String regex, List<Image> images) {
         super();
         this.regex = regex;
+        this.images = images;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @JsonProperty("images")
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @JsonProperty("images")
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 
@@ -56,14 +79,30 @@ public class Emoticon {
         this.regex = regex;
     }
 
-    @JsonProperty("images")
-    public List<Image> getImages() {
-        return images;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(regex)
+                .append(images)
+                .append(additionalProperties)
+                .toHashCode();
     }
 
-    @JsonProperty("images")
-    public void setImages(List<Image> images) {
-        this.images = images;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Emoticon emoticon = (Emoticon) o;
+
+        return new EqualsBuilder()
+                .append(id, emoticon.id)
+                .append(regex, emoticon.regex)
+                .append(images, emoticon.images)
+                .append(additionalProperties, emoticon.additionalProperties)
+                .isEquals();
     }
 
     @Override
@@ -71,31 +110,9 @@ public class Emoticon {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(regex).append(images).append(additionalProperties).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof Emoticon) == false) {
-            return false;
-        }
-        Emoticon rhs = ((Emoticon) other);
-        return new EqualsBuilder().append(regex, rhs.regex).append(images, rhs.images).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }
