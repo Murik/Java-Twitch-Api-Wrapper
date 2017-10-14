@@ -82,12 +82,15 @@ public class Token {
         this.userName = userName;
     }
 
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(authorization)
+                .append(clientId)
+                .append(userId)
+                .append(userName)
+                .append(valid)
+                .toHashCode();
     }
 
     @Override
@@ -107,14 +110,11 @@ public class Token {
                 .isEquals();
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(authorization)
-                .append(clientId)
-                .append(userId)
-                .append(userName)
-                .append(valid)
-                .toHashCode();
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

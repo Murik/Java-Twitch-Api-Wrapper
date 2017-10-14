@@ -55,3 +55,4 @@ gradle
 *.bat
 gradlew
 *.json
+pom.xml
