@@ -38,6 +38,7 @@ public class Twitch {
         resources.put("users", new UsersResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));//DONE
         resources.put("videos", new VideosResource(DEFAULT_BASE_URL, DEFAULT_API_VERSION));
         resources.put("root", new RootResource(DEFAULT_BASE_URL,DEFAULT_API_VERSION));
+        resources.put("group", new GroupResource(DEFAULT_BASE_URL,DEFAULT_API_VERSION));
     }
 
     /**
@@ -147,6 +148,8 @@ public class Twitch {
     public GamesResource games() {
         return (GamesResource) getResource("games");
     }
+
+    public GroupResource group() {return (GroupResource) getResource("group");}
 
     /**
      * Get the {@link IngestsResource} object. The {@link IngestsResource} provides
