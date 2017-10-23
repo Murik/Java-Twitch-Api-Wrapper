@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class ChattersGroup {
 
     @JsonProperty("_links")
-    private String links;
+    private Object links;
     @JsonProperty("chatter_count")
     private int chatterCount;
     @JsonProperty("chatters")
@@ -55,11 +55,11 @@ public class ChattersGroup {
         this.chatters = chatters;
     }
 
-    public String getLinks() {
+    public Object getLinks() {
         return links;
     }
 
-    public void setLinks(String links) {
+    public void setLinks(Object links) {
         this.links = links;
     }
 

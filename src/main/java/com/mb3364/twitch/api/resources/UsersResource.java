@@ -1,14 +1,21 @@
 package com.mb3364.twitch.api.resources;
 
-import com.mb3364.http.RequestParams;
-import com.mb3364.twitch.api.auth.Scopes;
-import com.mb3364.twitch.api.handlers.*;
-import com.mb3364.twitch.api.models.*;
-import org.apache.http.HttpResponse;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import com.mb3364.http.RequestParams;
+import com.mb3364.twitch.api.auth.Scopes;
+import com.mb3364.twitch.api.handlers.*;
+import com.mb3364.twitch.api.models.Block;
+import com.mb3364.twitch.api.models.Blocks;
+import com.mb3364.twitch.api.models.Follow;
+import com.mb3364.twitch.api.models.GetUser;
+import com.mb3364.twitch.api.models.User;
+import com.mb3364.twitch.api.models.UserFollows;
+import com.mb3364.twitch.api.models.UserSubscription;
+import com.mb3364.twitch.api.models.UsersMultiple;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
 
 /**
  * The {@link UsersResource} provides the functionality
@@ -29,6 +36,70 @@ public class UsersResource extends AbstractResource {
      */
     public UsersResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
+    }
+
+    /**
+     * Removes the {@link Block} of <code>target</code> for the authenticated <code>user</code>.
+     * Authenticated, required scope: {@link Scopes#USER_BLOCKS_EDIT}
+     *
+     * @param user    the authenticated user
+     * @param target  the user to unblock
+     * @param handler the response handler
+     */
+    public void deleteBlock(final String user, final String target, final UnblockResponseHandler handler) {
+        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), getChannelId(user).get(0), target);
+
+        http.delete(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                handler.onSuccess();
+            }
+        });
+    }
+
+    /**
+     * Adds a specified user to the followers of a specified channel.
+     * <p>
+     * There is an error response (<code>422 Unprocessable Entity</code>) if the channel could not be followed.
+     * <p>
+     * Authenticated, required scope: {@link Scopes#USER_FOLLOWS_EDIT}
+     *
+     * @param user                the authenticated user
+     * @param channel             the channel to follow
+     * @param enableNotifications receive email/push notifications when channel goes live. Default is <code>false</code>.
+     * @param handler             the response handler
+     */
+    public void follow(final String user, final String channel, final boolean enableNotifications, final UserFollowResponseHandler handler) {
+        // TODO: add hooks for Channel IDs
+        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
+
+        RequestParams params = new RequestParams();
+        params.put("notifications", Boolean.toString(enableNotifications));
+
+        http.put(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    Follow value = objectMapper.readValue(content, Follow.class);
+                    handler.onSuccess(value);
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Adds a specified user to the followers of a specified channel.
+     * <p>
+     * Authenticated, required scope: {@link Scopes#USER_FOLLOWS_EDIT}
+     *
+     * @param user    the authenticated user
+     * @param channel the channel to follow
+     * @param handler the response handler
+     */
+    public void follow(final String user, final String channel, final UserFollowResponseHandler handler) {
+        follow(user, channel, false, handler);
     }
 
     /**
@@ -81,23 +152,63 @@ public class UsersResource extends AbstractResource {
     }
 
     /**
-     * Checks if a specified user is subscribed to a specified channel.
-     * <p>
-     * Authenticated, required scope: {@link Scopes#USER_SUBSCRIPTIONS}
+     * Returns a list of {@link Block} objects on <code>User</code>'s block list.
+     * List sorted by recency, newest first.
+     * Authenticated, required scope: {@link Scopes#USER_BLOCKS_READ}
      *
-     * @param user    the authenticated user's name
-     * @param channel the channel name of the subscription
+     * @param user    the authenticated user
+     * @param params  the optional request parameters:
+     *                <ul>
+     *                <li><code>limit</code>: Integer: Maximum number of objects in array. Default: 25. Maximum: 100.</li>
+     *                <li><code>offset</code>:Integer: Object offset for pagination. Default: 0.</li>
+     *                </ul>
      * @param handler the response handler
      */
-    public void getSubscription(final String user, final String channel, final UserSubscriptionResponseHandler handler) {
-        // TODO: add hook for channel ID
-        String url = String.format("%s/users/%s/subscriptions/%s", getBaseUrl(), getChannelId(user).get(0), channel);
+    public void getBlocks(final String user, final RequestParams params, final BlocksResponseHandler handler) {
+        String url = String.format("%s/users/%s/blocks", getBaseUrl(), getChannelId(user).get(0));
+
+        http.get(url, params, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+                try {
+                    Blocks value = objectMapper.readValue(content, Blocks.class);
+                    handler.onSuccess(value.getBlocks());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a list of {@link Block} objects on <code>User</code>'s block list.
+     * List sorted by recency, newest first.
+     * Authenticated, required scope: {@link Scopes#USER_BLOCKS_READ}
+     *
+     * @param user    the authenticated user
+     * @param handler the response handler
+     */
+    public void getBlocks(final String user, final BlocksResponseHandler handler) {
+        getBlocks(user, new RequestParams(), handler);
+    }
+
+    /**
+     * Checks if a specified user follows a specified channel.
+     * If the user is following the channel, a {@link Follow} object is returned.
+     *
+     * @param user    the user
+     * @param channel the channel
+     * @param handler the response handler
+     */
+    public void getFollow(final String user, final String channel, final UserFollowResponseHandler handler) {
+        // TODO: add hook for getting channel IDs
+        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    UserSubscription value = objectMapper.readValue(content, UserSubscription.class);
+                    Follow value = objectMapper.readValue(content, Follow.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -150,22 +261,23 @@ public class UsersResource extends AbstractResource {
     }
 
     /**
-     * Checks if a specified user follows a specified channel.
-     * If the user is following the channel, a {@link Follow} object is returned.
+     * Checks if a specified user is subscribed to a specified channel.
+     * <p>
+     * Authenticated, required scope: {@link Scopes#USER_SUBSCRIPTIONS}
      *
-     * @param user    the user
-     * @param channel the channel
+     * @param user    the authenticated user's name
+     * @param channel the channel name of the subscription
      * @param handler the response handler
      */
-    public void getFollow(final String user, final String channel, final UserFollowResponseHandler handler) {
-        // TODO: add hook for getting channel IDs
-        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
+    public void getSubscription(final String user, final String channel, final UserSubscriptionResponseHandler handler) {
+        // TODO: add hook for channel ID
+        String url = String.format("%s/users/%s/subscriptions/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Follow value = objectMapper.readValue(content, Follow.class);
+                    UserSubscription value = objectMapper.readValue(content, UserSubscription.class);
                     handler.onSuccess(value);
                 } catch (IOException e) {
                     handler.onFailure(e);
@@ -174,111 +286,24 @@ public class UsersResource extends AbstractResource {
         });
     }
 
-    /**
-     * Adds a specified user to the followers of a specified channel.
-     * <p>
-     * There is an error response (<code>422 Unprocessable Entity</code>) if the channel could not be followed.
-     * <p>
-     * Authenticated, required scope: {@link Scopes#USER_FOLLOWS_EDIT}
-     *
-     * @param user                the authenticated user
-     * @param channel             the channel to follow
-     * @param enableNotifications receive email/push notifications when channel goes live. Default is <code>false</code>.
-     * @param handler             the response handler
-     */
-    public void follow(final String user, final String channel, final boolean enableNotifications, final UserFollowResponseHandler handler) {
-        // TODO: add hooks for Channel IDs
-        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
+    public void getUsers(final List<String> users, UsersMultipleResponseHandler handler) {
+        String commaUsers = StringUtils.join(users.toArray(), ",");
 
-        RequestParams params = new RequestParams();
-        params.put("notifications", Boolean.toString(enableNotifications));
+        String url = String.format("%s/users/?login=%s", getBaseUrl(), commaUsers);
 
-        http.put(url, params, new TwitchHttpResponseHandler(handler) {
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Follow value = objectMapper.readValue(content, Follow.class);
-                    handler.onSuccess(value);
+                    UsersMultiple value = objectMapper.readValue(content, UsersMultiple.class);
+                    handler.onSuccess(value.getTotal(), value.getUsers());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
             }
+
         });
-    }
-
-    /**
-     * Adds a specified user to the followers of a specified channel.
-     * <p>
-     * Authenticated, required scope: {@link Scopes#USER_FOLLOWS_EDIT}
-     *
-     * @param user    the authenticated user
-     * @param channel the channel to follow
-     * @param handler the response handler
-     */
-    public void follow(final String user, final String channel, final UserFollowResponseHandler handler) {
-        follow(user, channel, false, handler);
-    }
-
-    /**
-     * Deletes a specified user from the followers of a specified channel.
-     * <p>
-     * Authenticated, required scope: {@link Scopes#USER_FOLLOWS_EDIT}
-     *
-     * @param user    the authenticated user
-     * @param channel the channel to unfollow
-     * @param handler the response handler
-     */
-    public void unfollow(final String user, final String channel, final UserUnfollowResponseHandler handler) {
-        // TODO: add hooks for getting Channel IDs
-        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
-
-        http.delete(url, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                handler.onSuccess();
-            }
-        });
-    }
-
-    /**
-     * Returns a list of {@link Block} objects on <code>User</code>'s block list.
-     * List sorted by recency, newest first.
-     * Authenticated, required scope: {@link Scopes#USER_BLOCKS_READ}
-     *
-     * @param user    the authenticated user
-     * @param params  the optional request parameters:
-     *                <ul>
-     *                <li><code>limit</code>: Integer: Maximum number of objects in array. Default: 25. Maximum: 100.</li>
-     *                <li><code>offset</code>:Integer: Object offset for pagination. Default: 0.</li>
-     *                </ul>
-     * @param handler the response handler
-     */
-    public void getBlocks(final String user, final RequestParams params, final BlocksResponseHandler handler) {
-        String url = String.format("%s/users/%s/blocks", getBaseUrl(), getChannelId(user).get(0));
-
-        http.get(url, params, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                try {
-                    Blocks value = objectMapper.readValue(content, Blocks.class);
-                    handler.onSuccess(value.getBlocks());
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns a list of {@link Block} objects on <code>User</code>'s block list.
-     * List sorted by recency, newest first.
-     * Authenticated, required scope: {@link Scopes#USER_BLOCKS_READ}
-     *
-     * @param user    the authenticated user
-     * @param handler the response handler
-     */
-    public void getBlocks(final String user, final BlocksResponseHandler handler) {
-        getBlocks(user, new RequestParams(), handler);
     }
 
     /**
@@ -307,15 +332,17 @@ public class UsersResource extends AbstractResource {
     }
 
     /**
-     * Removes the {@link Block} of <code>target</code> for the authenticated <code>user</code>.
-     * Authenticated, required scope: {@link Scopes#USER_BLOCKS_EDIT}
+     * Deletes a specified user from the followers of a specified channel.
+     * <p>
+     * Authenticated, required scope: {@link Scopes#USER_FOLLOWS_EDIT}
      *
      * @param user    the authenticated user
-     * @param target  the user to unblock
+     * @param channel the channel to unfollow
      * @param handler the response handler
      */
-    public void deleteBlock(final String user, final String target, final UnblockResponseHandler handler) {
-        String url = String.format("%s/users/%s/blocks/%s", getBaseUrl(), getChannelId(user).get(0), target);
+    public void unfollow(final String user, final String channel, final UserUnfollowResponseHandler handler) {
+        // TODO: add hooks for getting Channel IDs
+        String url = String.format("%s/users/%s/follows/channels/%s", getBaseUrl(), getChannelId(user).get(0), channel);
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
