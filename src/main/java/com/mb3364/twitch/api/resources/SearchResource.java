@@ -1,5 +1,8 @@
 package com.mb3364.twitch.api.resources;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import com.mb3364.http.RequestParams;
 import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
 import com.mb3364.twitch.api.handlers.GamesResponseHandler;
@@ -7,10 +10,6 @@ import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
 import com.mb3364.twitch.api.models.SearchChannels;
 import com.mb3364.twitch.api.models.SearchGames;
 import com.mb3364.twitch.api.models.SearchStreams;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The {@link SearchResource} provides the functionality
@@ -87,7 +86,11 @@ public class SearchResource extends AbstractResource {
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
                     SearchGames value = objectMapper.readValue(content, SearchGames.class);
-                    handler.onSuccess(value.getGames().size(), value.getGames());
+                    int gamesTotal = 0;
+                    if (value.getGames() != null) {
+                        gamesTotal = value.getGames().size();
+                    }
+                    handler.onSuccess(gamesTotal, value.getGames());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
