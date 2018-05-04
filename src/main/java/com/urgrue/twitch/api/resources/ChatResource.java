@@ -29,27 +29,6 @@ public class ChatResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of all emoticon objects.
-     *
-     * @param handler the Response Handler
-     */
-    public void getEmoticons(final EmoticonsResponseHandler handler) {
-        String url = String.format("%s/chat/emoticons", getBaseUrl());
-
-        http.get(url, new TwitchHttpResponseHandler(handler) {
-            @Override
-            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
-                try {
-                    Emoticons value = objectMapper.readValue(content, Emoticons.class);
-                    handler.onSuccess(value.getEmoticons());
-                } catch (IOException e) {
-                    handler.onFailure(e);
-                }
-            }
-        });
-    }
-
-    /**
      * Returns a list of chat badges that can be used in the specified channel's chat.
      *
      * @param channel the name of the channel
@@ -70,4 +49,26 @@ public class ChatResource extends AbstractResource {
             }
         });
     }
+
+    /**
+     * Returns a list of all emoticon objects.
+     *
+     * @param handler the Response Handler
+     */
+    public void getEmoticons(final EmoticonsResponseHandler handler) {
+        String url = String.format("%s/chat/emoticons", getBaseUrl());
+
+        http.get(url, new TwitchHttpResponseHandler(handler) {
+            @Override
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
+                try {
+                    Emoticons value = objectMapper.readValue(content, Emoticons.class);
+                    handler.onSuccess(value.getEmoticons());
+                } catch (IOException e) {
+                    handler.onFailure(e);
+                }
+            }
+        });
+    }
+    //TODO: /chat/emoticon_images (Emote Sets)
 }

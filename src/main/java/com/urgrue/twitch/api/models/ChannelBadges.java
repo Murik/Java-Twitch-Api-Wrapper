@@ -1,113 +1,175 @@
-package com.urgrue.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package com.mb3364.twitch.api.models;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "global_mod",
+    "admin",
+    "broadcaster",
+    "mod",
+    "staff",
+    "turbo",
+    "subscriber"
+})
 public class ChannelBadges {
 
-    private Badge globalMod;
-    private Badge admin;
-    private Badge broadcaster;
-    private Badge mod;
-    private Badge staff;
-    private Badge turbo;
-    private Badge subscriber;
+    @JsonProperty("global_mod")
+    private GlobalMod globalMod;
+    @JsonProperty("admin")
+    private Admin admin;
+    @JsonProperty("broadcaster")
+    private Broadcaster broadcaster;
+    @JsonProperty("mod")
+    private Mod mod;
+    @JsonProperty("staff")
+    private Staff staff;
+    @JsonProperty("turbo")
+    private Turbo turbo;
+    @JsonProperty("subscriber")
+    private Subscriber subscriber;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @Override
-    public String toString() {
-        return "ChannelBadges{" +
-                "globalMod=" + globalMod +
-                ", admin=" + admin +
-                ", broadcaster=" + broadcaster +
-                ", mod=" + mod +
-                ", staff=" + staff +
-                ", turbo=" + turbo +
-                ", subscriber=" + subscriber +
-                '}';
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public ChannelBadges() {
+    }
+
+    /**
+     * 
+     * @param staff
+     * @param admin
+     * @param mod
+     * @param broadcaster
+     * @param globalMod
+     * @param subscriber
+     * @param turbo
+     */
+    public ChannelBadges(GlobalMod globalMod, Admin admin, Broadcaster broadcaster, Mod mod, Staff staff, Turbo turbo, Subscriber subscriber) {
+        super();
+        this.globalMod = globalMod;
+        this.admin = admin;
+        this.broadcaster = broadcaster;
+        this.mod = mod;
+        this.staff = staff;
+        this.turbo = turbo;
+        this.subscriber = subscriber;
+    }
+
+    @JsonProperty("global_mod")
+    public GlobalMod getGlobalMod() {
+        return globalMod;
+    }
+
+    @JsonProperty("global_mod")
+    public void setGlobalMod(GlobalMod globalMod) {
+        this.globalMod = globalMod;
+    }
+
+    @JsonProperty("admin")
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    @JsonProperty("admin")
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    @JsonProperty("broadcaster")
+    public Broadcaster getBroadcaster() {
+        return broadcaster;
+    }
+
+    @JsonProperty("broadcaster")
+    public void setBroadcaster(Broadcaster broadcaster) {
+        this.broadcaster = broadcaster;
+    }
+
+    @JsonProperty("mod")
+    public Mod getMod() {
+        return mod;
+    }
+
+    @JsonProperty("mod")
+    public void setMod(Mod mod) {
+        this.mod = mod;
+    }
+
+    @JsonProperty("staff")
+    public Staff getStaff() {
+        return staff;
+    }
+
+    @JsonProperty("staff")
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
+
+    @JsonProperty("turbo")
+    public Turbo getTurbo() {
+        return turbo;
+    }
+
+    @JsonProperty("turbo")
+    public void setTurbo(Turbo turbo) {
+        this.turbo = turbo;
+    }
+
+    @JsonProperty("subscriber")
+    public Subscriber getSubscriber() {
+        return subscriber;
+    }
+
+    @JsonProperty("subscriber")
+    public void setSubscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
-        ChannelBadges that = (ChannelBadges) o;
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
 
-        if (globalMod != null ? !globalMod.equals(that.globalMod) : that.globalMod != null) return false;
-        if (admin != null ? !admin.equals(that.admin) : that.admin != null) return false;
-        if (broadcaster != null ? !broadcaster.equals(that.broadcaster) : that.broadcaster != null) return false;
-        if (mod != null ? !mod.equals(that.mod) : that.mod != null) return false;
-        if (staff != null ? !staff.equals(that.staff) : that.staff != null) return false;
-        if (turbo != null ? !turbo.equals(that.turbo) : that.turbo != null) return false;
-        return !(subscriber != null ? !subscriber.equals(that.subscriber) : that.subscriber != null);
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
     @Override
     public int hashCode() {
-        int result = globalMod != null ? globalMod.hashCode() : 0;
-        result = 31 * result + (admin != null ? admin.hashCode() : 0);
-        result = 31 * result + (broadcaster != null ? broadcaster.hashCode() : 0);
-        result = 31 * result + (mod != null ? mod.hashCode() : 0);
-        result = 31 * result + (staff != null ? staff.hashCode() : 0);
-        result = 31 * result + (turbo != null ? turbo.hashCode() : 0);
-        result = 31 * result + (subscriber != null ? subscriber.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder().append(globalMod).append(admin).append(broadcaster).append(mod).append(staff).append(turbo).append(subscriber).append(additionalProperties).toHashCode();
     }
 
-    public Badge getGlobalMod() {
-
-        return globalMod;
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof ChannelBadges) == false) {
+            return false;
+        }
+        ChannelBadges rhs = ((ChannelBadges) other);
+        return new EqualsBuilder().append(globalMod, rhs.globalMod).append(admin, rhs.admin).append(broadcaster, rhs.broadcaster).append(mod, rhs.mod).append(staff, rhs.staff).append(turbo, rhs.turbo).append(subscriber, rhs.subscriber).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
-    public void setGlobalMod(Badge globalMod) {
-        this.globalMod = globalMod;
-    }
-
-    public Badge getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Badge admin) {
-        this.admin = admin;
-    }
-
-    public Badge getBroadcaster() {
-        return broadcaster;
-    }
-
-    public void setBroadcaster(Badge broadcaster) {
-        this.broadcaster = broadcaster;
-    }
-
-    public Badge getMod() {
-        return mod;
-    }
-
-    public void setMod(Badge mod) {
-        this.mod = mod;
-    }
-
-    public Badge getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Badge staff) {
-        this.staff = staff;
-    }
-
-    public Badge getTurbo() {
-        return turbo;
-    }
-
-    public void setTurbo(Badge turbo) {
-        this.turbo = turbo;
-    }
-
-    public Badge getSubscriber() {
-        return subscriber;
-    }
-
-    public void setSubscriber(Badge subscriber) {
-        this.subscriber = subscriber;
-    }
 }

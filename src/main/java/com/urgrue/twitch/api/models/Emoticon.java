@@ -1,55 +1,118 @@
 package com.urgrue.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "id",
+        "regex",
+        "images"
+})
 public class Emoticon {
 
+    @JsonProperty("id")
+    private int id;
+    @JsonProperty("regex")
     private String regex;
-    private List<EmoticonImage> images;
+    @JsonProperty("images")
+    private List<Image> images = null;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    /**
+     * No args constructor for use in serialization
+     */
+    public Emoticon() {
+    }
+
+    /**
+     * @param regex
+     * @param images
+     */
+    public Emoticon(String regex, List<Image> images) {
+        super();
+        this.regex = regex;
+        this.images = images;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @JsonProperty("images")
+    public List<Image> getImages() {
+        return images;
+    }
+
+    @JsonProperty("images")
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    @JsonProperty("regex")
+    public String getRegex() {
+        return regex;
+    }
+
+    @JsonProperty("regex")
+    public void setRegex(String regex) {
+        this.regex = regex;
+    }
 
     @Override
-    public String toString() {
-        return "Emoticon{" +
-                "regex='" + regex + '\'' +
-                ", images=" + images +
-                '}';
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(regex)
+                .append(images)
+                .append(additionalProperties)
+                .toHashCode();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
 
         Emoticon emoticon = (Emoticon) o;
 
-        if (regex != null ? !regex.equals(emoticon.regex) : emoticon.regex != null) return false;
-        return !(images != null ? !images.equals(emoticon.images) : emoticon.images != null);
-
+        return new EqualsBuilder()
+                .append(id, emoticon.id)
+                .append(regex, emoticon.regex)
+                .append(images, emoticon.images)
+                .append(additionalProperties, emoticon.additionalProperties)
+                .isEquals();
     }
 
     @Override
-    public int hashCode() {
-        int result = regex != null ? regex.hashCode() : 0;
-        result = 31 * result + (images != null ? images.hashCode() : 0);
-        return result;
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
-    public String getRegex() {
-        return regex;
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
-    public void setRegex(String regex) {
-        this.regex = regex;
-    }
-
-    public List<EmoticonImage> getImages() {
-        return images;
-    }
-
-    public void setImages(List<EmoticonImage> images) {
-        this.images = images;
-    }
 }

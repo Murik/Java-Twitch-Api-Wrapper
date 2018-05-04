@@ -1,12 +1,13 @@
-package com.urgrue.twitch.api.resources;
+package com.mb3364.twitch.api.resources;
 
-import com.urgrue.twitch.api.auth.Scopes;
-import com.urgrue.twitch.api.handlers.VideoResponseHandler;
-import com.urgrue.twitch.api.handlers.VideosResponseHandler;
-import com.urgrue.twitch.api.httpclient.RequestParams;
-import com.urgrue.twitch.api.models.Video;
-import com.urgrue.twitch.api.models.Videos;
-import io.netty.handler.codec.http.HttpHeaders;
+import com.mb3364.http.RequestParams;
+import com.mb3364.twitch.api.auth.Scopes;
+import com.mb3364.twitch.api.handlers.TopVideosResponseHandler;
+import com.mb3364.twitch.api.handlers.VideoResponseHandler;
+import com.mb3364.twitch.api.handlers.VideosResponseHandler;
+import com.mb3364.twitch.api.models.Video;
+import com.mb3364.twitch.api.models.Videos;
+import com.mb3364.twitch.api.models.VideosTop;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,24 +15,26 @@ import java.util.Map;
 
 /**
  * The {@link VideosResource} provides the functionality
- * to access the <code>/videos</code> endpoints of the TwitchApiClient API.
+ * to access the <code>/videos</code> endpoints of the Twitch API.
  *
  * @author Matthew Bell
  */
 public class VideosResource extends AbstractResource {
 
     /**
-     * Construct the resource using the TwitchApiClient API base URL and specified API version.
+     * Construct the resource using the Twitch API base URL and specified API version.
      *
-     * @param baseUrl    the base URL of the TwitchApiClient API
-     * @param apiVersion the requested version of the TwitchApiClient API
+     * @param baseUrl    the base URL of the Twitch API
+     * @param apiVersion the requested version of the Twitch API
      */
     public VideosResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
     }
 
     /**
-     * Returns a {@link Video} object.
+     * Gets a specified {@link Video} object.
+     *
+     * Note that in prior versions of the API, the specified video ID required a “v” prefix. That prefix is deprecated.
      *
      * @param id      the ID of the Video
      * @param handler the response handler
@@ -41,7 +44,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
                     Video value = objectMapper.readValue(content, Video.class);
                     handler.onSuccess(value);
@@ -53,7 +56,7 @@ public class VideosResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of {@link Video}'s created in a given time period sorted by number of views, most popular first.
+     * Gets the top videos based on viewcount, optionally filtered by game or time period.
      *
      * @param params  the optional request parameters:
      *                <ul>
@@ -62,20 +65,22 @@ public class VideosResource extends AbstractResource {
      *                <li><code>game</code>: Returns only videos from game.</li>
      *                <li><code>period</code>: Returns only videos created in time period.
      *                Valid values are <code>week</code>, <code>month</code>,
-     *                or <code>all</code>. Default is <code>week</code>.
-     *                </li>
+     *                or <code>all</code>. Default is <code>week</code>.</li>
+     *                <li><code>broadcast_type</code>: Comma-Separated List: Constrains the type of videos returned.
+     *                Valid values: (any combination of) <code>archive</code>, <code>highlight</code>, <code>upload</code>.
+     *                Default: <code>highlight</code>.</li>
      *                </ul>
      * @param handler the response handler
      */
-    public void getTop(final RequestParams params, final VideosResponseHandler handler) {
+    public void getTop(final RequestParams params, final TopVideosResponseHandler handler) {
         String url = String.format("%s/videos/top", getBaseUrl());
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
-                    Videos value = objectMapper.readValue(content, Videos.class);
-                    handler.onSuccess(value.getVideos().size(), value.getVideos());
+                    VideosTop value = objectMapper.readValue(content, VideosTop.class);
+                    handler.onSuccess(value.getVods().size(), value.getVods());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
@@ -88,18 +93,22 @@ public class VideosResource extends AbstractResource {
      *
      * @param handler the response handler
      */
-    public void getTop(final VideosResponseHandler handler) {
+    public void getTop(final TopVideosResponseHandler handler) {
         getTop(null, handler);
     }
 
     /**
-     * Returns a list of {@link Video}'s from channels that the authenticated user is following.
+     * Gets the videos from channels followed by a user, based on a specified OAuth token.
+     *
      * Authenticated, required scope: {@link Scopes#USER_READ}
      *
      * @param params  the optional request parameters:
      *                <ul>
      *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
      *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *                <li><code>broadcast_type</code>: Comma-Separated List: Constrains the type of videos returned.
+     *                Valid values: (any combination of) <code>archive</code>, <code>highlight</code>, <code>upload</code>.
+     *                Default: <code>highlight</code>.</li>
      *                </ul>
      * @param handler the response handler
      */
@@ -108,7 +117,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
                     Videos value = objectMapper.readValue(content, Videos.class);
                     handler.onSuccess(value.getVideos().size(), value.getVideos());

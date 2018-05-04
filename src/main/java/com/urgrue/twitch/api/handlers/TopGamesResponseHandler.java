@@ -1,9 +1,9 @@
-package com.urgrue.twitch.api.handlers;
+package com.mb3364.twitch.api.handlers;
 
-import com.urgrue.twitch.api.models.TopGame;
+import com.mb3364.twitch.api.models.Top;
 
 import java.util.List;
 
 public interface TopGamesResponseHandler extends BaseFailureHandler {
-    void onSuccess(int total, List<TopGame> games);
+    void onSuccess(int total, List<Top> games);
 }

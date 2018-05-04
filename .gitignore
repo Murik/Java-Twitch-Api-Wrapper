@@ -48,3 +48,11 @@ crashlytics-build.properties
 ## Project-specific
 src/test/
 target/
+
+.gradle
+build
+gradle
+*.bat
+gradlew
+*.json
+pom.xml

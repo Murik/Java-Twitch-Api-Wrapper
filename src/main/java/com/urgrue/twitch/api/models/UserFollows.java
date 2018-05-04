@@ -1,38 +1,98 @@
-package com.urgrue.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.mb3364.twitch.api.models;
 
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "follows",
+    "_total"
+})
 public class UserFollows {
 
+    @JsonProperty("follows")
+    private List<Follow> follows = null;
     @JsonProperty("_total")
-    private int total;
-    private List<UserFollow> follows;
+    private Integer total;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @Override
-    public String toString() {
-        return "UserFollows{" +
-                "total=" + total +
-                ", follows=" + follows +
-                '}';
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public UserFollows() {
     }
 
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
+    /**
+     * 
+     * @param total
+     * @param follows
+     */
+    public UserFollows(List<Follow> follows, Integer total) {
+        super();
+        this.follows = follows;
         this.total = total;
     }
 
-    public List<UserFollow> getFollows() {
+    @JsonProperty("follows")
+    public List<Follow> getFollows() {
         return follows;
     }
 
-    public void setFollows(List<UserFollow> follows) {
+    @JsonProperty("follows")
+    public void setFollows(List<Follow> follows) {
         this.follows = follows;
     }
+
+    @JsonProperty("_total")
+    public Integer getTotal() {
+        return total;
+    }
+
+    @JsonProperty("_total")
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(follows).append(total).append(additionalProperties).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof UserFollows)) {
+            return false;
+        }
+        UserFollows rhs = ((UserFollows) other);
+        return new EqualsBuilder().append(follows, rhs.follows).append(total, rhs.total)
+                .append(additionalProperties, rhs.additionalProperties).isEquals();
+    }
+
 }

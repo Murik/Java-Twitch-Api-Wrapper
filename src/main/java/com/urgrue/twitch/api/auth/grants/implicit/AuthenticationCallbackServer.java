@@ -83,7 +83,7 @@ public class AuthenticationCallbackServer implements AuthenticationListener {
                 Thread thread = new Thread(request);
                 thread.start();
             } catch (SocketException e) {
-                // Socket was closed by another thread
+                stop();
                 break;
             }
         }

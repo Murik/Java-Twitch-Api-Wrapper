@@ -1,267 +1,340 @@
 package com.urgrue.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Date;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "mature",
+        "status",
+        "broadcaster_language",
+        "display_name",
+        "game",
+        "language",
+        "_id",
+        "name",
+        "created_at",
+        "updated_at",
+        "partner",
+        "logo",
+        "video_banner",
+        "profile_banner",
+        "profile_banner_background_color",
+        "url",
+        "views",
+        "followers"
+})
 public class Channel {
 
-    private boolean mature;
+    @JsonProperty("mature")
+    private Boolean mature;
+    @JsonProperty("status")
     private String status;
+    @JsonProperty("broadcaster_language")
     private String broadcasterLanguage;
+    @JsonProperty("display_name")
     private String displayName;
+    @JsonProperty("game")
     private String game;
-    private int delay;
+    @JsonProperty("language")
     private String language;
     @JsonProperty("_id")
-    private long id;
+    private Integer id;
+    @JsonProperty("name")
     private String name;
-    private Date createdAt;
-    private Date updatedAt;
+    @JsonProperty("created_at")
+    private String createdAt;
+    @JsonProperty("updated_at")
+    private String updatedAt;
+    @JsonProperty("partner")
+    private Boolean partner;
+    @JsonProperty("logo")
     private String logo;
-    private String banner;
+    @JsonProperty("video_banner")
     private String videoBanner;
-    private String background;
+    @JsonProperty("profile_banner")
     private String profileBanner;
+    @JsonProperty("profile_banner_background_color")
     private String profileBannerBackgroundColor;
-    private boolean partner;
+    @JsonProperty("url")
     private String url;
-    private long views;
-    private int followers;
-    private String email;
-    private String streamKey;
+    @JsonProperty("views")
+    private Integer views;
+    @JsonProperty("followers")
+    private Integer followers;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public static boolean isNullOrEmpty(Channel channel) {
-        return channel == null || channel.equals(new Channel());
+    /**
+     * No args constructor for use in serialization
+     */
+    public Channel() {
     }
 
-    public boolean isMature() {
-        return mature;
-    }
-
-    public void setMature(boolean mature) {
+    /**
+     * @param logo
+     * @param status
+     * @param profileBanner
+     * @param game
+     * @param url
+     * @param videoBanner
+     * @param id
+     * @param updatedAt
+     * @param followers
+     * @param views
+     * @param mature
+     * @param createdAt
+     * @param name
+     * @param partner
+     * @param language
+     * @param displayName
+     * @param broadcasterLanguage
+     * @param profileBannerBackgroundColor
+     */
+    public Channel(Boolean mature, String status, String broadcasterLanguage, String displayName, String game,
+                   String language, Integer id, String name, String createdAt, String updatedAt, Boolean partner,
+                   String logo, String videoBanner, String profileBanner,
+                   String profileBannerBackgroundColor, String url, Integer views, Integer followers) {
+        super();
         this.mature = mature;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
+        this.broadcasterLanguage = broadcasterLanguage;
+        this.displayName = displayName;
+        this.game = game;
+        this.language = language;
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.partner = partner;
+        this.logo = logo;
+        this.videoBanner = videoBanner;
+        this.profileBanner = profileBanner;
+        this.profileBannerBackgroundColor = profileBannerBackgroundColor;
+        this.url = url;
+        this.views = views;
+        this.followers = followers;
     }
 
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonProperty("broadcaster_language")
     public String getBroadcasterLanguage() {
         return broadcasterLanguage;
     }
 
+    @JsonProperty("broadcaster_language")
     public void setBroadcasterLanguage(String broadcasterLanguage) {
         this.broadcasterLanguage = broadcasterLanguage;
     }
 
+    @JsonProperty("created_at")
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    @JsonProperty("created_at")
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @JsonProperty("display_name")
     public String getDisplayName() {
         return displayName;
     }
 
+    @JsonProperty("display_name")
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    @JsonProperty("followers")
+    public Integer getFollowers() {
+        return followers;
+    }
+
+    @JsonProperty("followers")
+    public void setFollowers(Integer followers) {
+        this.followers = followers;
+    }
+
+    @JsonProperty("game")
     public String getGame() {
         return game;
     }
 
+    @JsonProperty("game")
     public void setGame(String game) {
         this.game = game;
     }
 
-    public int getDelay() {
-        return delay;
+    @JsonProperty("_id")
+    public Integer getId() {
+        return id;
     }
 
-    public void setDelay(int delay) {
-        this.delay = delay;
+    @JsonProperty("_id")
+    public void setId(Integer id) {
+        this.id = id;
     }
 
+    @JsonProperty("language")
     public String getLanguage() {
         return language;
     }
 
+    @JsonProperty("language")
     public void setLanguage(String language) {
         this.language = language;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
+    @JsonProperty("logo")
     public String getLogo() {
         return logo;
     }
 
+    @JsonProperty("logo")
     public void setLogo(String logo) {
         this.logo = logo;
     }
 
-    public String getBanner() {
-        return banner;
+    @JsonProperty("mature")
+    public Boolean getMature() {
+        return mature;
     }
 
-    public void setBanner(String banner) {
-        this.banner = banner;
+    @JsonProperty("mature")
+    public void setMature(Boolean mature) {
+        this.mature = mature;
     }
 
-    public String getVideoBanner() {
-        return videoBanner;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
-    public void setVideoBanner(String videoBanner) {
-        this.videoBanner = videoBanner;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getBackground() {
-        return background;
+    @JsonProperty("partner")
+    public Boolean getPartner() {
+        return partner;
     }
 
-    public void setBackground(String background) {
-        this.background = background;
+    @JsonProperty("partner")
+    public void setPartner(Boolean partner) {
+        this.partner = partner;
     }
 
+    @JsonProperty("profile_banner")
     public String getProfileBanner() {
         return profileBanner;
     }
 
+    @JsonProperty("profile_banner")
     public void setProfileBanner(String profileBanner) {
         this.profileBanner = profileBanner;
     }
 
+    @JsonProperty("profile_banner_background_color")
     public String getProfileBannerBackgroundColor() {
         return profileBannerBackgroundColor;
     }
 
+    @JsonProperty("profile_banner_background_color")
     public void setProfileBannerBackgroundColor(String profileBannerBackgroundColor) {
         this.profileBannerBackgroundColor = profileBannerBackgroundColor;
     }
 
-    public boolean isPartner() {
-        return partner;
+    @JsonProperty("status")
+    public String getStatus() {
+        return status;
     }
 
-    public void setPartner(boolean partner) {
-        this.partner = partner;
+    @JsonProperty("status")
+    public void setStatus(String status) {
+        this.status = status;
     }
 
+    @JsonProperty("updated_at")
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @JsonProperty("updated_at")
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @JsonProperty("url")
     public String getUrl() {
         return url;
     }
 
+    @JsonProperty("url")
     public void setUrl(String url) {
         this.url = url;
     }
 
-    public long getViews() {
+    @JsonProperty("video_banner")
+    public String getVideoBanner() {
+        return videoBanner;
+    }
+
+    @JsonProperty("video_banner")
+    public void setVideoBanner(String videoBanner) {
+        this.videoBanner = videoBanner;
+    }
+
+    @JsonProperty("views")
+    public Integer getViews() {
         return views;
     }
 
-    public void setViews(long views) {
+    @JsonProperty("views")
+    public void setViews(Integer views) {
         this.views = views;
-    }
-
-    public int getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(int followers) {
-        this.followers = followers;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getStreamKey() {
-        return streamKey;
-    }
-
-    public void setStreamKey(String streamKey) {
-        this.streamKey = streamKey;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Channel channel = (Channel) o;
-
-        return id == channel.id;
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return new HashCodeBuilder().append(mature).append(status).append(broadcasterLanguage).append(displayName).append(game).append(language).append(id).append(name).append(createdAt).append(updatedAt).append(partner).append(logo).append(videoBanner).append(profileBanner).append(profileBannerBackgroundColor).append(url).append(views).append(followers).append(additionalProperties).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Channel)) {
+            return false;
+        }
+        Channel rhs = ((Channel) other);
+        return new EqualsBuilder().append(mature, rhs.mature).append(status, rhs.status).append(broadcasterLanguage, rhs.broadcasterLanguage).append(displayName, rhs.displayName).append(game, rhs.game).append(language, rhs.language).append(id, rhs.id).append(name, rhs.name).append(createdAt, rhs.createdAt).append(updatedAt, rhs.updatedAt).append(partner, rhs.partner).append(logo, rhs.logo).append(videoBanner, rhs.videoBanner).append(profileBanner, rhs.profileBanner).append(profileBannerBackgroundColor, rhs.profileBannerBackgroundColor).append(url, rhs.url).append(views, rhs.views).append(followers, rhs.followers).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
     @Override
     public String toString() {
-        return "ChannelSummary{" +
-                "mature=" + mature +
-                ", status='" + status + '\'' +
-                ", broadcasterLanguage='" + broadcasterLanguage + '\'' +
-                ", displayName='" + displayName + '\'' +
-                ", game='" + game + '\'' +
-                ", delay=" + delay +
-                ", language='" + language + '\'' +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", logo='" + logo + '\'' +
-                ", banner='" + banner + '\'' +
-                ", videoBanner='" + videoBanner + '\'' +
-                ", background='" + background + '\'' +
-                ", profileBanner='" + profileBanner + '\'' +
-                ", profileBannerBackgroundColor='" + profileBannerBackgroundColor + '\'' +
-                ", partner=" + partner +
-                ", url='" + url + '\'' +
-                ", views=" + views +
-                ", followers=" + followers +
-                ", email='" + email + '\'' +
-                ", streamKey='" + streamKey + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
 }

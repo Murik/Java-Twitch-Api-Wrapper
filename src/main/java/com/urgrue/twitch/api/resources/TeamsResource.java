@@ -15,7 +15,8 @@ import java.util.Map;
  * The {@link TeamsResource} provides the functionality
  * to access the <code>/teams</code> endpoints of the TwitchApiClient API.
  *
- * @author Matthew Bell
+ * @author Matthew Bell (original author)
+ * @author Ague Mort (contributing author)
  */
 public class TeamsResource extends AbstractResource {
 
@@ -30,12 +31,13 @@ public class TeamsResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of active teams.
+     * Gets all active teams.
      *
      * @param params  the optional request parameters:
      *                <ul>
-     *                <li><code>limit</code>:  the maximum number of objects in array. Maximum is 100.</li>
-     *                <li><code>offset</code>: the object offset for pagination. Default is 0.</li>
+     *                <li><code>limit</code>: Integer: Maximum number of objects to return, sorted by creation date.
+     *                Default: 25. Maximum: 100.</li>
+     *                <li><code>offset</code>: Integer: Object offset for pagination of results. Default: 0.</li>
      *                </ul>
      * @param handler the response handler
      */
@@ -56,7 +58,7 @@ public class TeamsResource extends AbstractResource {
     }
 
     /**
-     * Returns a list of active teams.
+     * Gets all active teams.
      *
      * @param handler the response handler
      */

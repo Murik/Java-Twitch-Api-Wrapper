@@ -1,26 +1,24 @@
-package com.urgrue.twitch.api.resources;
-
-import com.urgrue.twitch.api.handlers.TokenResponseHandler;
-import com.urgrue.twitch.api.models.Root;
-import io.netty.handler.codec.http.HttpHeaders;
+package com.mb3364.twitch.api.resources;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import com.mb3364.twitch.api.handlers.TokenResponseHandler;
+import com.mb3364.twitch.api.models.Root;
 
 /**
  * The {@link RootResource} provides the functionality
- * to access the root <code>/</code> endpoints of the TwitchApiClient API.
+ * to access the root <code>/</code> endpoints of the Twitch API.
  *
  * @author Matthew Bell
  */
 public class RootResource extends AbstractResource {
 
     /**
-     * Construct the resource using the TwitchApiClient API base URL and specified API version.
+     * Construct the resource using the Twitch API base URL and specified API version.
      *
-     * @param baseUrl    the base URL of the TwitchApiClient API
-     * @param apiVersion the requested version of the TwitchApiClient API
+     * @param baseUrl    the base URL of the Twitch API
+     * @param apiVersion the requested version of the Twitch API
      */
     public RootResource(String baseUrl, int apiVersion) {
         super(baseUrl, apiVersion);
@@ -37,7 +35,7 @@ public class RootResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
+            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 try {
                     Root value = objectMapper.readValue(content, Root.class);
                     handler.onSuccess(value.getToken());
@@ -46,5 +44,6 @@ public class RootResource extends AbstractResource {
                 }
             }
         });
+
     }
 }

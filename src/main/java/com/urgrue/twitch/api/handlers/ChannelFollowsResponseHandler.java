@@ -1,9 +1,8 @@
 package com.urgrue.twitch.api.handlers;
 
-import com.urgrue.twitch.api.models.ChannelFollow;
-
 import java.util.List;
+import com.mb3364.twitch.api.models.FollowUsers;
 
 public interface ChannelFollowsResponseHandler extends BaseFailureHandler {
-    void onSuccess(int total, List<ChannelFollow> follows);
+    void onSuccess(int total, List<FollowUsers> follows, String cursor);
 }

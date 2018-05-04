@@ -1,70 +1,111 @@
-package com.urgrue.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.mb3364.twitch.api.models;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "error",
+    "message",
+    "status"
+})
 public class Error {
 
     @JsonProperty("error")
-    private String statusText;
-    @JsonProperty("status")
-    private int statusCode;
+    private String error;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("status")
+    private Integer status;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @Override
-    public String toString() {
-        return "Error{" +
-                "statusText='" + statusText + '\'' +
-                ", statusCode=" + statusCode +
-                ", message='" + message + '\'' +
-                '}';
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public Error() {
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Error that = (Error) o;
-
-        if (statusCode != that.statusCode) return false;
-        if (statusText != null ? !statusText.equals(that.statusText) : that.statusText != null) return false;
-        return !(message != null ? !message.equals(that.message) : that.message != null);
-
+    /**
+     * 
+     * @param message
+     * @param error
+     * @param status
+     */
+    public Error(String error, String message, Integer status) {
+        super();
+        this.error = error;
+        this.message = message;
+        this.status = status;
     }
 
-    @Override
-    public int hashCode() {
-        int result = statusText != null ? statusText.hashCode() : 0;
-        result = 31 * result + statusCode;
-        result = 31 * result + (message != null ? message.hashCode() : 0);
-        return result;
+    @JsonProperty("error")
+    public String getError() {
+        return error;
     }
 
-    public String getStatusText() {
-
-        return statusText;
+    @JsonProperty("error")
+    public void setError(String error) {
+        this.error = error;
     }
 
-    public void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
-
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
+    @JsonProperty("message")
     public String getMessage() {
         return message;
     }
 
+    @JsonProperty("message")
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @JsonProperty("status")
+    public Integer getStatus() {
+        return status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(error).append(message).append(status).append(additionalProperties).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof Error) == false) {
+            return false;
+        }
+        Error rhs = ((Error) other);
+        return new EqualsBuilder().append(error, rhs.error).append(message, rhs.message).append(status, rhs.status).append(additionalProperties, rhs.additionalProperties).isEquals();
+    }
+
 }

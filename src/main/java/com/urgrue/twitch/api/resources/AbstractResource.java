@@ -8,10 +8,18 @@ import com.urgrue.twitch.api.httpclient.HttpResponseHandler;
 import com.urgrue.twitch.api.httpclient.NingAsyncHttpClient;
 import com.urgrue.twitch.api.models.Error;
 import io.netty.handler.codec.http.HttpHeaders;
+import com.urgrue.twitch.api.handlers.BaseFailureHandler;
+import com.urgrue.twitch.api.models.GetUserId;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * AbstractResource is the abstract base class of a TwitchApiClient resource.
@@ -25,6 +33,8 @@ public abstract class AbstractResource {
     protected static final HttpClient http = new NingAsyncHttpClient(); // can reuse
 
     private final String baseUrl; // Base url for twitch rest api
+    protected String cId;
+    private HttpResponse response;
 
     /**
      * Construct a resource using the TwitchApiClient API base URL and specified API version.
@@ -67,10 +77,15 @@ public abstract class AbstractResource {
      */
     public void setClientId(String clientId) {
         if (clientId != null && clientId.length() > 0) {
+            this.cId = clientId;
             http.setHeader("Client-ID", clientId);
         } else {
             http.removeHeader("Client-ID");
         }
+    }
+
+    public String getClientId() {
+        return cId;
     }
 
     /**
@@ -101,7 +116,7 @@ public abstract class AbstractResource {
             try {
                 if (content.length() > 0) {
                     Error error = objectMapper.readValue(content, Error.class);
-                    getApiHandler().onFailure(statusCode, error.getStatusText(), error.getMessage());
+                    getApiHandler().onFailure(statusCode, error.getStatus().toString(), error.getMessage());
                 } else {
                     getApiHandler().onFailure(statusCode, "", "");
                 }
@@ -114,5 +129,25 @@ public abstract class AbstractResource {
         public void onFailure(Throwable throwable) {
             getApiHandler().onFailure(throwable);
         }
+    }
+
+    public List<String> getChannelId(final String channel) {
+        String url = String.format("%s/users?login=%s", getBaseUrl(), channel);
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(url);
+        request.addHeader("Client-ID", getClientId());
+        request.addHeader("Accept", "application/vnd.twitchtv.v5+json");
+
+        try {
+            response = client.execute(request);
+            GetUserId value = objectMapper.readValue(new InputStreamReader(response.getEntity().getContent()), GetUserId.class);
+            List<String> uId = new CopyOnWriteArrayList<>();
+            value.getUsers().forEach(userId -> uId.add(userId.getId()));
+            return uId;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

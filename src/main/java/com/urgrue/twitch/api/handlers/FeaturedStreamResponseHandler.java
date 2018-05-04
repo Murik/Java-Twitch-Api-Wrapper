@@ -1,9 +1,9 @@
-package com.urgrue.twitch.api.handlers;
+package com.mb3364.twitch.api.handlers;
 
-import com.urgrue.twitch.api.models.FeaturedStream;
+import com.mb3364.twitch.api.models.Featured;
 
 import java.util.List;
 
 public interface FeaturedStreamResponseHandler extends BaseFailureHandler {
-    void onSuccess(List<FeaturedStream> streams);
+    void onSuccess(List<Featured> streams);
 }

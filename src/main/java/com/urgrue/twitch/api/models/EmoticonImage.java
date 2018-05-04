@@ -1,77 +1,111 @@
-package com.urgrue.twitch.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package com.mb3364.twitch.api.models;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "id",
+    "code",
+    "emoticon_set"
+})
 public class EmoticonImage {
 
-    private int emoticonSet;
-    private int height;
-    private int width;
-    private String url;
+    @JsonProperty("id")
+    private Integer id;
+    @JsonProperty("code")
+    private String code;
+    @JsonProperty("emoticon_set")
+    private Object emoticonSet;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EmoticonImage that = (EmoticonImage) o;
-
-        if (emoticonSet != that.emoticonSet) return false;
-        if (height != that.height) return false;
-        if (width != that.width) return false;
-        return url.equals(that.url);
-
+    /**
+     * No args constructor for use in serialization
+     * 
+     */
+    public EmoticonImage() {
     }
 
-    @Override
-    public int hashCode() {
-        int result = emoticonSet;
-        result = 31 * result + height;
-        result = 31 * result + width;
-        result = 31 * result + url.hashCode();
-        return result;
+    /**
+     * 
+     * @param id
+     * @param emoticonSet
+     * @param code
+     */
+    public EmoticonImage(Integer id, String code, Object emoticonSet) {
+        super();
+        this.id = id;
+        this.code = code;
+        this.emoticonSet = emoticonSet;
+    }
+
+    @JsonProperty("id")
+    public Integer getId() {
+        return id;
+    }
+
+    @JsonProperty("id")
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @JsonProperty("code")
+    public String getCode() {
+        return code;
+    }
+
+    @JsonProperty("code")
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @JsonProperty("emoticon_set")
+    public Object getEmoticonSet() {
+        return emoticonSet;
+    }
+
+    @JsonProperty("emoticon_set")
+    public void setEmoticonSet(Object emoticonSet) {
+        this.emoticonSet = emoticonSet;
     }
 
     @Override
     public String toString() {
-        return "EmoticonImage{" +
-                "emoticonSet=" + emoticonSet +
-                ", height=" + height +
-                ", width=" + width +
-                ", url='" + url + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 
-    public int getEmoticonSet() {
-        return emoticonSet;
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
     }
 
-    public void setEmoticonSet(int emoticonSet) {
-        this.emoticonSet = emoticonSet;
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
-    public int getHeight() {
-        return height;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(id).append(code).append(emoticonSet).append(additionalProperties).toHashCode();
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof EmoticonImage) == false) {
+            return false;
+        }
+        EmoticonImage rhs = ((EmoticonImage) other);
+        return new EqualsBuilder().append(id, rhs.id).append(code, rhs.code).append(emoticonSet, rhs.emoticonSet).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }
