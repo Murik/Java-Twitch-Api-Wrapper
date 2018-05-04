@@ -1,6 +1,6 @@
 package com.urgrue.twitch.api.handlers;
 
-import com.mb3364.twitch.api.models.Subscription;
+import com.urgrue.twitch.api.models.Subscription;
 
 public interface ChannelSubscriptionResponseHandler extends BaseFailureHandler {
     void onSuccess(Subscription subscription);

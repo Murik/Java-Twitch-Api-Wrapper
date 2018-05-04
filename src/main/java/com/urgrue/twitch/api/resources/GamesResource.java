@@ -6,8 +6,6 @@ import com.urgrue.twitch.api.models.Games;
 import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The {@link GamesResource} provides the functionality

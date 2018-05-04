@@ -1,17 +1,16 @@
-package com.mb3364.twitch.api.resources;
+package com.urgrue.twitch.api.resources;
 
-import com.mb3364.http.RequestParams;
-import com.mb3364.twitch.api.auth.Scopes;
-import com.mb3364.twitch.api.handlers.TopVideosResponseHandler;
-import com.mb3364.twitch.api.handlers.VideoResponseHandler;
-import com.mb3364.twitch.api.handlers.VideosResponseHandler;
-import com.mb3364.twitch.api.models.Video;
-import com.mb3364.twitch.api.models.Videos;
-import com.mb3364.twitch.api.models.VideosTop;
+import com.urgrue.twitch.api.auth.Scopes;
+import com.urgrue.twitch.api.handlers.TopVideosResponseHandler;
+import com.urgrue.twitch.api.handlers.VideoResponseHandler;
+import com.urgrue.twitch.api.handlers.VideosResponseHandler;
+import com.urgrue.twitch.api.httpclient.RequestParams;
+import com.urgrue.twitch.api.models.Video;
+import com.urgrue.twitch.api.models.Videos;
+import com.urgrue.twitch.api.models.VideosTop;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The {@link VideosResource} provides the functionality
@@ -44,7 +43,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Video value = objectMapper.readValue(content, Video.class);
                     handler.onSuccess(value);
@@ -77,7 +76,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     VideosTop value = objectMapper.readValue(content, VideosTop.class);
                     handler.onSuccess(value.getVods().size(), value.getVods());
@@ -117,7 +116,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Videos value = objectMapper.readValue(content, Videos.class);
                     handler.onSuccess(value.getVideos().size(), value.getVideos());

@@ -1,5 +1,5 @@
 
-package com.mb3364.twitch.api.models;
+package com.urgrue.twitch.api.models;
 
 import java.util.HashMap;
 import java.util.Map;

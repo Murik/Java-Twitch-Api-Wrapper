@@ -3,8 +3,6 @@ package com.urgrue.twitch.api.httpclient;
 import com.urgrue.twitch.api.handlers.BaseFailureHandler;
 import io.netty.handler.codec.http.HttpHeaders;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * Handles HTTP response's from the TwitchApiClient API.

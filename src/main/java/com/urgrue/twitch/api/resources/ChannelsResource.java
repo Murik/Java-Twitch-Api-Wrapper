@@ -5,11 +5,9 @@ import com.urgrue.twitch.api.handlers.*;
 import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.*;
 import io.netty.handler.codec.http.HttpHeaders;
-import org.apache.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponse;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The {@link ChannelsResource} provides the functionality
@@ -360,7 +358,7 @@ public class ChannelsResource extends AbstractResource {
 
         http.post(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 handler.onSuccess();
             }
         });
@@ -424,7 +422,7 @@ public class ChannelsResource extends AbstractResource {
 
         http.put(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 // There is no proper response.  Just code 204
             }
         });

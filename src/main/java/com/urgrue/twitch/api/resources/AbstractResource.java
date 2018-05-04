@@ -2,6 +2,7 @@ package com.urgrue.twitch.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.urgrue.twitch.api.Twitch;
 import com.urgrue.twitch.api.handlers.BaseFailureHandler;
 import com.urgrue.twitch.api.httpclient.HttpClient;
 import com.urgrue.twitch.api.httpclient.HttpResponseHandler;
@@ -10,15 +11,13 @@ import com.urgrue.twitch.api.models.Error;
 import io.netty.handler.codec.http.HttpHeaders;
 import com.urgrue.twitch.api.handlers.BaseFailureHandler;
 import com.urgrue.twitch.api.models.GetUserId;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
+import io.netty.handler.codec.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -34,7 +33,7 @@ public abstract class AbstractResource {
 
     private final String baseUrl; // Base url for twitch rest api
     protected String cId;
-    private HttpResponse response;
+    private org.apache.http.HttpResponse response;
 
     /**
      * Construct a resource using the TwitchApiClient API base URL and specified API version.
@@ -134,10 +133,10 @@ public abstract class AbstractResource {
     public List<String> getChannelId(final String channel) {
         String url = String.format("%s/users?login=%s", getBaseUrl(), channel);
 
-        HttpClient client = HttpClientBuilder.create().build();
+        org.apache.http.client.HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
         request.addHeader("Client-ID", getClientId());
-        request.addHeader("Accept", "application/vnd.twitchtv.v5+json");
+        request.addHeader("Accept", "application/vnd.twitchtv.v" + Integer.toString(Twitch.DEFAULT_API_VERSION) + "+json");
 
         try {
             response = client.execute(request);

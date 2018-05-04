@@ -1,6 +1,6 @@
-package com.mb3364.twitch.api.handlers;
+package com.urgrue.twitch.api.handlers;
 
-import com.mb3364.twitch.api.models.Follow;
+import com.urgrue.twitch.api.models.Follow;
 
 import java.util.List;
 

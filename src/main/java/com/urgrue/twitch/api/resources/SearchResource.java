@@ -1,15 +1,14 @@
-package com.mb3364.twitch.api.resources;
+package com.urgrue.twitch.api.resources;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import com.mb3364.http.RequestParams;
-import com.mb3364.twitch.api.handlers.ChannelsResponseHandler;
-import com.mb3364.twitch.api.handlers.GamesResponseHandler;
-import com.mb3364.twitch.api.handlers.StreamsResponseHandler;
-import com.mb3364.twitch.api.models.SearchChannels;
-import com.mb3364.twitch.api.models.SearchGames;
-import com.mb3364.twitch.api.models.SearchStreams;
+import com.urgrue.twitch.api.httpclient.RequestParams;
+import com.urgrue.twitch.api.handlers.ChannelsResponseHandler;
+import com.urgrue.twitch.api.handlers.GamesResponseHandler;
+import com.urgrue.twitch.api.handlers.StreamsResponseHandler;
+import com.urgrue.twitch.api.models.SearchChannels;
+import com.urgrue.twitch.api.models.SearchGames;
+import com.urgrue.twitch.api.models.SearchStreams;
+import io.netty.handler.codec.http.HttpHeaders;
 
 /**
  * The {@link SearchResource} provides the functionality
@@ -46,7 +45,7 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     SearchChannels value = objectMapper.readValue(content, SearchChannels.class);
                     handler.onSuccess(value.getTotal(), value.getChannels());
@@ -83,7 +82,7 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     SearchGames value = objectMapper.readValue(content, SearchGames.class);
                     int gamesTotal = 0;
@@ -129,7 +128,7 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     SearchStreams value = objectMapper.readValue(content, SearchStreams.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());

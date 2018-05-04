@@ -8,8 +8,6 @@ import com.urgrue.twitch.api.models.Teams;
 import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The {@link TeamsResource} provides the functionality

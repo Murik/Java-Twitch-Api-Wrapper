@@ -1,10 +1,9 @@
-package com.mb3364.twitch.api.resources;
+package com.urgrue.twitch.api.resources;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import com.mb3364.twitch.api.handlers.TokenResponseHandler;
-import com.mb3364.twitch.api.models.Root;
+import com.urgrue.twitch.api.handlers.TokenResponseHandler;
+import com.urgrue.twitch.api.models.Root;
+import io.netty.handler.codec.http.HttpHeaders;
 
 /**
  * The {@link RootResource} provides the functionality
@@ -35,7 +34,7 @@ public class RootResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Root value = objectMapper.readValue(content, Root.class);
                     handler.onSuccess(value.getToken());

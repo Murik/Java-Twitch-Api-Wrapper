@@ -1,7 +1,8 @@
 
-package com.mb3364.twitch.api.models;
+package com.urgrue.twitch.api.models;
 
 import com.fasterxml.jackson.annotation.*;
+import com.urgrue.twitch.api.models.Follow;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

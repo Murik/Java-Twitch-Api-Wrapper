@@ -5,8 +5,6 @@ import com.urgrue.twitch.api.models.Ingests;
 import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The {@link IngestsResource} provides the functionality
