@@ -6,6 +6,7 @@ import com.urgrue.twitch.api.handlers.VideosResponseHandler;
 import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.Video;
 import com.urgrue.twitch.api.models.Videos;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,7 +41,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Video value = objectMapper.readValue(content, Video.class);
                     handler.onSuccess(value);
@@ -71,7 +72,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Videos value = objectMapper.readValue(content, Videos.class);
                     handler.onSuccess(value.getVideos().size(), value.getVideos());
@@ -107,7 +108,7 @@ public class VideosResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Videos value = objectMapper.readValue(content, Videos.class);
                     handler.onSuccess(value.getVideos().size(), value.getVideos());

@@ -2,6 +2,7 @@ package com.urgrue.twitch.api.resources;
 
 import com.urgrue.twitch.api.handlers.IngestsResponseHandler;
 import com.urgrue.twitch.api.models.Ingests;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,7 +36,7 @@ public class IngestsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Ingests value = objectMapper.readValue(content, Ingests.class);
                     handler.onSuccess(value.getIngests());

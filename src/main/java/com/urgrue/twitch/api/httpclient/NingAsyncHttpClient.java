@@ -1,10 +1,9 @@
 package com.urgrue.twitch.api.httpclient;
 
-import com.ning.http.client.AsyncCompletionHandler;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.Response;
-import com.ning.http.client.providers.jdk.JDKAsyncHttpProvider;
+import org.asynchttpclient.AsyncCompletionHandler;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Response;
+import static org.asynchttpclient.Dsl.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -12,12 +11,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class NingAsyncHttpClient extends HttpClient {
 
-    private static final AsyncHttpClient asyncHttpClient = new AsyncHttpClient(); // can reuse
+    private static final AsyncHttpClient asyncHttpClient = asyncHttpClient(); // can reuse
 
-    public NingAsyncHttpClient() {
-        super();
-        new AsyncHttpClient(new JDKAsyncHttpProvider(new AsyncHttpClientConfig.Builder().build()));
-    }
+//    public NingAsyncHttpClient() {
+//        super();
+//        new AsyncHttpClient(new JDKAsyncHttpProvider(new AsyncHttpClientConfig.Builder().build()));
+//    }
 
     /**
      * {@inheritDoc}
@@ -32,24 +31,23 @@ public class NingAsyncHttpClient extends HttpClient {
      */
     @Override
     public void delete(final String url, final RequestParams params, final HttpResponseHandler handler) {
-        try {
             asyncHttpClient.prepareDelete(url)
                     .setHeaders(convertHeaders(getHeaders()))
-                    .setParameters(convertParams(params))
+                    .setQueryParams(convertParams(params))
                     .execute(new AsyncCompletionHandler<Response>() {
 
                         @Override
                         public Response onCompleted(Response response) throws Exception {
                             int statusCode = response.getStatusCode();
-                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
+//                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
                             String responseString = response.getResponseBody();
 
                             if (!isSuccessful(statusCode)) {
-                                handler.onFailure(statusCode, headers, responseString);
+                                handler.onFailure(statusCode, response.getHeaders(), responseString);
                                 return response;
                             }
 
-                            handler.onSuccess(statusCode, headers, responseString);
+                            handler.onSuccess(statusCode, response.getHeaders(), responseString);
                             return response;
                         }
 
@@ -58,9 +56,6 @@ public class NingAsyncHttpClient extends HttpClient {
                             handler.onFailure(t);
                         }
                     });
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
     }
 
     /**
@@ -76,24 +71,23 @@ public class NingAsyncHttpClient extends HttpClient {
      */
     @Override
     public void get(final String url, final RequestParams params, final HttpResponseHandler handler) {
-        try {
             asyncHttpClient.prepareGet(url)
                     .setHeaders(convertHeaders(getHeaders()))
-                    .setParameters(convertParams(params))
+                    .setQueryParams(convertParams(params))
                     .execute(new AsyncCompletionHandler<Response>() {
 
                         @Override
                         public Response onCompleted(Response response) throws Exception {
                             int statusCode = response.getStatusCode();
-                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
+//                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
                             String responseString = response.getResponseBody();
 
                             if (!isSuccessful(statusCode)) {
-                                handler.onFailure(statusCode, headers, responseString);
+                                handler.onFailure(statusCode, response.getHeaders(), responseString);
                                 return response;
                             }
 
-                            handler.onSuccess(statusCode, headers, responseString);
+                            handler.onSuccess(statusCode, response.getHeaders(), responseString);
                             return response;
                         }
 
@@ -102,9 +96,6 @@ public class NingAsyncHttpClient extends HttpClient {
                             handler.onFailure(t);
                         }
                     });
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
     }
 
     /**
@@ -120,24 +111,23 @@ public class NingAsyncHttpClient extends HttpClient {
      */
     @Override
     public void head(final String url, final RequestParams params, final HttpResponseHandler handler) {
-        try {
             asyncHttpClient.prepareHead(url)
                     .setHeaders(convertHeaders(getHeaders()))
-                    .setParameters(convertParams(params))
+                    .setQueryParams(convertParams(params))
                     .execute(new AsyncCompletionHandler<Response>() {
 
                         @Override
                         public Response onCompleted(Response response) throws Exception {
                             int statusCode = response.getStatusCode();
-                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
+//                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
                             String responseString = response.getResponseBody();
 
                             if (!isSuccessful(statusCode)) {
-                                handler.onFailure(statusCode, headers, responseString);
+                                handler.onFailure(statusCode, response.getHeaders(), responseString);
                                 return response;
                             }
 
-                            handler.onSuccess(statusCode, headers, responseString);
+                            handler.onSuccess(statusCode, response.getHeaders(), responseString);
                             return response;
                         }
 
@@ -146,9 +136,6 @@ public class NingAsyncHttpClient extends HttpClient {
                             handler.onFailure(t);
                         }
                     });
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
     }
 
     /**
@@ -164,24 +151,23 @@ public class NingAsyncHttpClient extends HttpClient {
      */
     @Override
     public void post(final String url, final RequestParams params, final HttpResponseHandler handler) {
-        try {
             asyncHttpClient.preparePost(url)
                     .setHeaders(convertHeaders(getHeaders()))
-                    .setParameters(convertParams(params))
+                    .setFormParams(convertParams(params))
                     .execute(new AsyncCompletionHandler<Response>() {
 
                         @Override
                         public Response onCompleted(Response response) throws Exception {
                             int statusCode = response.getStatusCode();
-                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
+//                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
                             String responseString = response.getResponseBody();
 
                             if (!isSuccessful(statusCode)) {
-                                handler.onFailure(statusCode, headers, responseString);
+                                handler.onFailure(statusCode, response.getHeaders(), responseString);
                                 return response;
                             }
 
-                            handler.onSuccess(statusCode, headers, responseString);
+                            handler.onSuccess(statusCode, response.getHeaders(), responseString);
                             return response;
                         }
 
@@ -190,9 +176,6 @@ public class NingAsyncHttpClient extends HttpClient {
                             handler.onFailure(t);
                         }
                     });
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
     }
 
     /**
@@ -208,24 +191,23 @@ public class NingAsyncHttpClient extends HttpClient {
      */
     @Override
     public void put(final String url, final RequestParams params, final HttpResponseHandler handler) {
-        try {
             asyncHttpClient.preparePut(url)
                     .setHeaders(convertHeaders(getHeaders()))
-                    .setParameters(convertParams(params))
+                    .setFormParams(convertParams(params))
                     .execute(new AsyncCompletionHandler<Response>() {
 
                         @Override
                         public Response onCompleted(Response response) throws Exception {
                             int statusCode = response.getStatusCode();
-                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
+//                            Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
                             String responseString = response.getResponseBody();
 
                             if (!isSuccessful(statusCode)) {
-                                handler.onFailure(statusCode, headers, responseString);
+                                handler.onFailure(statusCode, response.getHeaders(), responseString);
                                 return response;
                             }
 
-                            handler.onSuccess(statusCode, headers, responseString);
+                            handler.onSuccess(statusCode, response.getHeaders(), responseString);
                             return response;
                         }
 
@@ -234,9 +216,6 @@ public class NingAsyncHttpClient extends HttpClient {
                             handler.onFailure(t);
                         }
                     });
-        } catch (IOException e) {
-            handler.onFailure(e);
-        }
     }
 
     /**
@@ -246,10 +225,10 @@ public class NingAsyncHttpClient extends HttpClient {
      * @param params The parameters that should be sent with the HTTP request.
      * @return A {@link Map} object of all the request parameters.
      */
-    private Map<String, Collection<String>> convertParams(RequestParams params) {
-        Map<String, Collection<String>> ningParams = new HashMap<String, Collection<String>>();
+    private Map<String, List<String>> convertParams(RequestParams params) {
+        Map<String, List<String>> ningParams = new HashMap<String, List<String>>();
         for (ConcurrentHashMap.Entry<String, String> param : params.entrySet()) {
-            Collection<String> paramValues = new ArrayList<String>();
+            List<String> paramValues = new ArrayList<String>();
             paramValues.add(param.getValue());
             ningParams.put(param.getKey(), paramValues);
         }
@@ -263,8 +242,8 @@ public class NingAsyncHttpClient extends HttpClient {
      * @param headers The headers that should be sent with the HTTP request.
      * @return A {@link Map} object of all the Headers.
      */
-    private Map<String, Collection<String>> convertHeaders(Map<String, String> headers) {
-        Map<String, Collection<String>> ningHeaders = new HashMap<String, Collection<String>>();
+    private Map<CharSequence, Collection<String>> convertHeaders(Map<String, String> headers) {
+        Map<CharSequence, Collection<String>> ningHeaders = new HashMap<CharSequence, Collection<String>>();
         for (ConcurrentHashMap.Entry<String, String> param : headers.entrySet()) {
             Collection<String> paramValues = new ArrayList<String>();
             paramValues.add(param.getValue());

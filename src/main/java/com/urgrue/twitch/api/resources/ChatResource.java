@@ -4,6 +4,7 @@ import com.urgrue.twitch.api.handlers.BadgesResponseHandler;
 import com.urgrue.twitch.api.handlers.EmoticonsResponseHandler;
 import com.urgrue.twitch.api.models.ChannelBadges;
 import com.urgrue.twitch.api.models.Emoticons;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ChatResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Emoticons value = objectMapper.readValue(content, Emoticons.class);
                     handler.onSuccess(value.getEmoticons());
@@ -59,7 +60,7 @@ public class ChatResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     ChannelBadges value = objectMapper.readValue(content, ChannelBadges.class);
                     handler.onSuccess(value);

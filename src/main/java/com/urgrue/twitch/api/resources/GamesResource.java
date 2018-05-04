@@ -3,6 +3,7 @@ package com.urgrue.twitch.api.resources;
 import com.urgrue.twitch.api.handlers.TopGamesResponseHandler;
 import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.Games;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +42,7 @@ public class GamesResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Games value = objectMapper.readValue(content, Games.class);
                     handler.onSuccess(value.getTotal(), value.getTop());

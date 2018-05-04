@@ -5,6 +5,7 @@ import com.urgrue.twitch.api.handlers.GamesResponseHandler;
 import com.urgrue.twitch.api.handlers.StreamsResponseHandler;
 import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.SearchResultContainer;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +46,7 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
                     handler.onSuccess(value.getTotal(), value.getChannels());
@@ -85,7 +86,7 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());
@@ -123,7 +124,7 @@ public class SearchResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     SearchResultContainer value = objectMapper.readValue(content, SearchResultContainer.class);
                     handler.onSuccess(value.getGames().size(), value.getGames());

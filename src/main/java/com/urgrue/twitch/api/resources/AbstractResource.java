@@ -7,6 +7,7 @@ import com.urgrue.twitch.api.httpclient.HttpClient;
 import com.urgrue.twitch.api.httpclient.HttpResponseHandler;
 import com.urgrue.twitch.api.httpclient.NingAsyncHttpClient;
 import com.urgrue.twitch.api.models.Error;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -93,10 +94,10 @@ public abstract class AbstractResource {
         }
 
         @Override
-        public abstract void onSuccess(int statusCode, Map<String, List<String>> headers, String content);
+        public abstract void onSuccess(int statusCode, HttpHeaders headers, String content);
 
         @Override
-        public void onFailure(int statusCode, Map<String, List<String>> headers, String content) {
+        public void onFailure(int statusCode, HttpHeaders headers, String content) {
             try {
                 if (content.length() > 0) {
                     Error error = objectMapper.readValue(content, Error.class);

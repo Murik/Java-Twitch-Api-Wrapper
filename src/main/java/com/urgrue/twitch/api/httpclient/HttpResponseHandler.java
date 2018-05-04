@@ -1,6 +1,7 @@
 package com.urgrue.twitch.api.httpclient;
 
 import com.urgrue.twitch.api.handlers.BaseFailureHandler;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,9 @@ public abstract class HttpResponseHandler {
         this.apiHandler = apiHandler;
     }
 
-    public abstract void onSuccess(int statusCode, Map<String, List<String>> headers, String content);
+    public abstract void onSuccess(int statusCode, HttpHeaders headers, String content);
 
-    public abstract void onFailure(int statusCode, Map<String, List<String>> headers, String content);
+    public abstract void onFailure(int statusCode, HttpHeaders headers, String content);
 
     public void onFailure(Throwable throwable) {
         apiHandler.onFailure(throwable);

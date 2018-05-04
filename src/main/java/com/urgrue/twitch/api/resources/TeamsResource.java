@@ -5,6 +5,7 @@ import com.urgrue.twitch.api.handlers.TeamsResponseHandler;
 import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.Team;
 import com.urgrue.twitch.api.models.Teams;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +44,7 @@ public class TeamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Teams value = objectMapper.readValue(content, Teams.class);
                     handler.onSuccess(value.getTeams());
@@ -74,7 +75,7 @@ public class TeamsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Team value = objectMapper.readValue(content, Team.class);
                     handler.onSuccess(value);

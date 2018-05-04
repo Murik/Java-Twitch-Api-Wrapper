@@ -10,6 +10,7 @@ import com.urgrue.twitch.api.models.FeaturedStreamContainer;
 import com.urgrue.twitch.api.models.StreamContainer;
 import com.urgrue.twitch.api.models.Streams;
 import com.urgrue.twitch.api.models.StreamsSummary;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +46,7 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     StreamContainer value = objectMapper.readValue(content, StreamContainer.class);
                     handler.onSuccess(value.getStream());
@@ -75,7 +76,7 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Streams value = objectMapper.readValue(content, Streams.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());
@@ -111,7 +112,7 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     FeaturedStreamContainer value = objectMapper.readValue(content, FeaturedStreamContainer.class);
                     handler.onSuccess(value.getFeatured());
@@ -144,7 +145,7 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     StreamsSummary value = objectMapper.readValue(content, StreamsSummary.class);
                     handler.onSuccess(value);
@@ -165,7 +166,7 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     StreamsSummary value = objectMapper.readValue(content, StreamsSummary.class);
                     handler.onSuccess(value);
@@ -192,7 +193,7 @@ public class StreamsResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Streams value = objectMapper.readValue(content, Streams.class);
                     handler.onSuccess(value.getTotal(), value.getStreams());

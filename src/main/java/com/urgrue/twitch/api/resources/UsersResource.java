@@ -4,6 +4,7 @@ import com.urgrue.twitch.api.auth.Scopes;
 import com.urgrue.twitch.api.handlers.*;
 import com.urgrue.twitch.api.httpclient.RequestParams;
 import com.urgrue.twitch.api.models.*;
+import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +39,7 @@ public class UsersResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     User value = objectMapper.readValue(content, User.class);
                     handler.onSuccess(value);
@@ -60,7 +61,7 @@ public class UsersResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     User value = objectMapper.readValue(content, User.class);
                     handler.onSuccess(value);
@@ -84,7 +85,7 @@ public class UsersResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     UserSubscription value = objectMapper.readValue(content, UserSubscription.class);
                     handler.onSuccess(value);
@@ -116,7 +117,7 @@ public class UsersResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     UserFollows value = objectMapper.readValue(content, UserFollows.class);
                     handler.onSuccess(value.getTotal(), value.getFollows());
@@ -150,7 +151,7 @@ public class UsersResource extends AbstractResource {
 
         http.get(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     UserFollow value = objectMapper.readValue(content, UserFollow.class);
                     handler.onSuccess(value);
@@ -178,7 +179,7 @@ public class UsersResource extends AbstractResource {
 
         http.put(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     UserFollow value = objectMapper.readValue(content, UserFollow.class);
                     handler.onSuccess(value);
@@ -214,7 +215,7 @@ public class UsersResource extends AbstractResource {
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 handler.onSuccess();
             }
         });
@@ -238,7 +239,7 @@ public class UsersResource extends AbstractResource {
 
         http.get(url, params, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Blocks value = objectMapper.readValue(content, Blocks.class);
                     handler.onSuccess(value.getBlocks());
@@ -274,7 +275,7 @@ public class UsersResource extends AbstractResource {
 
         http.put(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
                     Block value = objectMapper.readValue(content, Block.class);
                     handler.onSuccess(value);
@@ -298,7 +299,7 @@ public class UsersResource extends AbstractResource {
 
         http.delete(url, new TwitchHttpResponseHandler(handler) {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 handler.onSuccess();
             }
         });
