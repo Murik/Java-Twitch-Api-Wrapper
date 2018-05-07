@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.urgrue.twitch'
-version = '5.0.0'
+version = '5.0.4'
 
 description = """Twitch-v5-API-Wrapper"""
 

@@ -7,10 +7,7 @@ import com.urgrue.twitch.api.handlers.StreamResponseHandler;
 import com.urgrue.twitch.api.handlers.StreamsResponseHandler;
 import com.urgrue.twitch.api.handlers.StreamsSummaryResponseHandler;
 import com.urgrue.twitch.api.httpclient.RequestParams;
-import com.urgrue.twitch.api.models.Stream;
-import com.urgrue.twitch.api.models.Streams;
-import com.urgrue.twitch.api.models.StreamsFeatured;
-import com.urgrue.twitch.api.models.StreamsSummary;
+import com.urgrue.twitch.api.models.*;
 import io.netty.handler.codec.http.HttpHeaders;
 
 import java.io.IOException;
@@ -73,8 +70,8 @@ public class StreamsResource extends AbstractResource {
             @Override
             public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
-                    Stream value = objectMapper.readValue(content, Stream.class);
-                    handler.onSuccess(value);
+                    StreamContainer value = objectMapper.readValue(content, StreamContainer.class);
+                    handler.onSuccess(value.getStream());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }
@@ -99,8 +96,8 @@ public class StreamsResource extends AbstractResource {
             @Override
             public void onSuccess(int statusCode, HttpHeaders headers, String content) {
                 try {
-                    Stream value = objectMapper.readValue(content, Stream.class);
-                    handler.onSuccess(value);
+                    StreamContainer value = objectMapper.readValue(content, StreamContainer.class);
+                    handler.onSuccess(value.getStream());
                 } catch (IOException e) {
                     handler.onFailure(e);
                 }

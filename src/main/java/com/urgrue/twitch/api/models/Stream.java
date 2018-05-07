@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Stream {
 
     @JsonProperty("_id")
-    private Integer id;
+    private Long id;
     @JsonProperty("game")
     private String game;
     @JsonProperty("community_id")
@@ -76,7 +76,7 @@ public class Stream {
      * @param channel
      * @param communityId
      */
-    public Stream(Integer id, String game, String communityId, Integer viewers, Integer videoHeight, Float averageFps, Integer delay, String createdAt, Boolean isPlaylist, Preview preview, Channel channel) {
+    public Stream(Long id, String game, String communityId, Integer viewers, Integer videoHeight, Float averageFps, Integer delay, String createdAt, Boolean isPlaylist, Preview preview, Channel channel) {
         super();
         this.id = id;
         this.game = game;
@@ -91,13 +91,17 @@ public class Stream {
         this.channel = channel;
     }
 
+    public boolean isOnline() {
+        return id != 0;
+    }
+
     @JsonProperty("_id")
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     @JsonProperty("_id")
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
