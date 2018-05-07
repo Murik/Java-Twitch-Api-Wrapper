@@ -1,6 +1,7 @@
 
 package com.urgrue.twitch.api.models;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -45,7 +46,7 @@ public class Stream {
     @JsonProperty("delay")
     private Integer delay;
     @JsonProperty("created_at")
-    private String createdAt;
+    private Date createdAt;
     @JsonProperty("is_playlist")
     private Boolean isPlaylist;
     @JsonProperty("preview")
@@ -57,13 +58,13 @@ public class Stream {
 
     /**
      * No args constructor for use in serialization
-     * 
+     *
      */
     public Stream() {
     }
 
     /**
-     * 
+     *
      * @param id
      * @param videoHeight
      * @param viewers
@@ -76,7 +77,7 @@ public class Stream {
      * @param channel
      * @param communityId
      */
-    public Stream(Long id, String game, String communityId, Integer viewers, Integer videoHeight, Float averageFps, Integer delay, String createdAt, Boolean isPlaylist, Preview preview, Channel channel) {
+    public Stream(Long id, String game, String communityId, Integer viewers, Integer videoHeight, Float averageFps, Integer delay, Date createdAt, Boolean isPlaylist, Preview preview, Channel channel) {
         super();
         this.id = id;
         this.game = game;
@@ -166,12 +167,12 @@ public class Stream {
     }
 
     @JsonProperty("created_at")
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
     @JsonProperty("created_at")
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 

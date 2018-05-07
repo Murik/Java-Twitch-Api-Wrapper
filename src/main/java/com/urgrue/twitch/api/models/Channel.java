@@ -1,5 +1,6 @@
 package com.urgrue.twitch.api.models;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -48,13 +49,13 @@ public class Channel {
     @JsonProperty("language")
     private String language;
     @JsonProperty("_id")
-    private Integer id;
+    private Long id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("created_at")
-    private String createdAt;
+    private Date createdAt;
     @JsonProperty("updated_at")
-    private String updatedAt;
+    private Date updatedAt;
     @JsonProperty("partner")
     private Boolean partner;
     @JsonProperty("logo")
@@ -68,7 +69,7 @@ public class Channel {
     @JsonProperty("url")
     private String url;
     @JsonProperty("views")
-    private Integer views;
+    private Long views;
     @JsonProperty("followers")
     private Integer followers;
     @JsonIgnore
@@ -101,9 +102,9 @@ public class Channel {
      * @param profileBannerBackgroundColor
      */
     public Channel(Boolean mature, String status, String broadcasterLanguage, String displayName, String game,
-                   String language, Integer id, String name, String createdAt, String updatedAt, Boolean partner,
+                   String language, Long id, String name, Date createdAt, Date updatedAt, Boolean partner,
                    String logo, String videoBanner, String profileBanner,
-                   String profileBannerBackgroundColor, String url, Integer views, Integer followers) {
+                   String profileBannerBackgroundColor, String url, Long views, Integer followers) {
         super();
         this.mature = mature;
         this.status = status;
@@ -141,12 +142,12 @@ public class Channel {
     }
 
     @JsonProperty("created_at")
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
     @JsonProperty("created_at")
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -181,12 +182,12 @@ public class Channel {
     }
 
     @JsonProperty("_id")
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     @JsonProperty("_id")
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -271,12 +272,12 @@ public class Channel {
     }
 
     @JsonProperty("updated_at")
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
     @JsonProperty("updated_at")
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -301,12 +302,12 @@ public class Channel {
     }
 
     @JsonProperty("views")
-    public Integer getViews() {
+    public Long getViews() {
         return views;
     }
 
     @JsonProperty("views")
-    public void setViews(Integer views) {
+    public void setViews(Long views) {
         this.views = views;
     }
 
